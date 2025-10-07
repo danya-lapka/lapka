@@ -28,7 +28,7 @@ export default function Home() {
             </p>
           </div>
         </div>
-        <Image src={`/lapka/hello-image.png`} alt="boykisser"/>
+        <Image src={`/hello-image.png`} alt="boykisser"/>
       </section>
       <section className="skills-section">
         <h1 className="heading-1">Скиллы <span className="heading-4">так называемые</span></h1>
