@@ -3,13 +3,13 @@ import Image from "next/image";
 import { Fragment, useState } from "react";
 import styles from './style.module.scss';
 import clsx from "clsx";
-import { useSound } from "@/hooks";
+import { useSoundHold } from "@/hooks";
 
 const Hello_Img = () => {
   const isProd = process.env.NODE_ENV === 'production';
   const [state, setState] = useState(false);
   let url = state ? '/hello-img2': '/hello-img';
-  const { start, stop } = useSound(`${isProd ? '/lapka' : ''}/sound/meow.mp3`, 1200);
+  const { start, stop } = useSoundHold(`${isProd ? '/lapka' : ''}/sound/meow.mp3`, 1200);
 
   const meowing = () => {
     setState(true); 

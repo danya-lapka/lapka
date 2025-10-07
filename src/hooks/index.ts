@@ -1,3 +1,4 @@
 import { useSound } from "./useSound";
+import { useSoundHold } from "./useSoundHold";
 
-export { useSound }
+export { useSoundHold, useSound }

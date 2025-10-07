@@ -1,13 +1,16 @@
 'use client';
-import { useRef, useCallback } from 'react';
+import { useRef, useState, useCallback } from 'react';
 
-export function useSound(soundPath: string, interval: number = 1100) {
+export function useSound(soundPath: string) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
+  // Инициализация audio элемента
   const initializeAudio = useCallback(() => {
-    if (typeof window !== 'undefined' && !audioRef.current) {
+    if (typeof window !== 'undefined') {
       audioRef.current = new Audio(soundPath);
+      audioRef.current.addEventListener('ended', () => setIsPlaying(false));
+      audioRef.current.addEventListener('pause', () => setIsPlaying(false));
     }
   }, [soundPath]);
 
@@ -17,41 +20,31 @@ export function useSound(soundPath: string, interval: number = 1100) {
     }
     
     if (audioRef.current) {
-      audioRef.current.currentTime = 0;
-      audioRef.current.play().catch(error => {
-        console.error('Ошибка воспроизведения:', error);
-      });
+      audioRef.current.play()
+        .then(() => setIsPlaying(true))
+        .catch(error => console.error('Ошибка воспроизведения:', error));
     }
   }, [initializeAudio]);
 
-  const start = useCallback(() => {
-    // Воспроизводим сразу
-    play();
-    
-    // Устанавливаем интервал для повторения
-    intervalRef.current = setInterval(play, interval);
-  }, [play, interval]);
-
-  const stop = useCallback(() => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-    
+  const pause = useCallback(() => {
     if (audioRef.current) {
       audioRef.current.pause();
-      audioRef.current.currentTime = 0;
+      setIsPlaying(false);
     }
   }, []);
 
-  // Очистка
-  const cleanup = useCallback(() => {
-    stop();
-  }, [stop]);
+  const stop = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      setIsPlaying(false);
+    }
+  }, []);
 
   return {
-    start,
+    play,
+    pause,
     stop,
-    cleanup
+    isPlaying,
   };
 }
