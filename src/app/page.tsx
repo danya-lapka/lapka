@@ -8,7 +8,7 @@ export default function Home() {
     <Fragment>
       <section className="hello-section f-r">
         <div className="hello-text h-min">
-          <h1 className="heading-1">Всем мяу</h1>
+          <h1 className="heading-1">Всем мяу {process.env.NODE_ENV}</h1>
           <div className="body-4">
             <p>
               Меня зовут Даниил(Даня) или как вам удобно. Мой ник — danya_lapka (Даня Лапка). Я фембой, люблю носить чулки, юбочку и другие милые вещички<span className="body-3">❣</span> Фоточки в 

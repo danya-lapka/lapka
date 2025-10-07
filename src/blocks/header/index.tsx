@@ -17,7 +17,6 @@ const Header = () => {
       href: "/table"
     }
   ]
-  console.log(process.env.NODE_ENV);
 
   return (
     <header className={clsx({
