@@ -1,0 +1,25 @@
+@use '@/styles/variables' as *;
+@use '@/styles/globals' as *;
+@use 'sass:list';
+
+@mixin mixin($c1, $c2) {
+  @extend .color-#{$c1};
+  &:hover {
+    @extend .color-#{$c2};
+  }
+}
+$colors: (
+  "white": ("white", "gray-1"),
+  "black": ("black", "gray-3"),
+  "accent": ("accent", "accent-1"),
+  "accent-alt": ("accent", "accent-3"),
+  "white-accent": ("white", "accent"),
+  "black-accent": ("black", "accent"),
+  "accent-1": ("accent-1", "accent"),
+  "accent-3": ("accent-3", "accent")
+);
+@each $name, $value in $colors {
+  .#{$name} {
+    @include mixin(list.nth($value, 1), list.nth($value, 2));
+  }
+}

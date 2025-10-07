@@ -1,0 +1,209 @@
+@use '@/styles/variables' as *;
+@use 'sass:list';
+
+@mixin texting($family, $size, $weight, $gap) {
+  font: {
+    family: $family;
+    size: $size*$n;
+    weight: $weight;
+  }
+  p {
+    margin-top: $gap*$n;
+  }
+}
+$texting: (
+  heading-1: ($font-heading, 64, 800, 8),
+  heading-2: ($font-heading, 48, 700, 8),
+  heading-3: ($font-heading, 40, 700, 8),
+  heading-4: ($font-heading, 36, 600, 8),
+  body-1: ($font-body, 36, 700, 8),
+  body-2: ($font-body, 32, 600, 8),
+  body-3: ($font-body, 24, 600, 8),
+  body-4: ($font-body, 20, 500, 8),
+  body-5: ($font-body, 16, 500, 8),
+  body-6: ($font-body, 12, 500, 8)
+);
+@each $name, $value in $texting {
+  .#{$name} {
+    @include texting(list.nth($value, 1), list.nth($value, 2), list.nth($value, 3), list.nth($value, 4))
+  }
+}
+
+$color: (
+  "white": $white,
+  "black": $black,
+  "accent": $accent,
+  "gray-1": $gray-1,
+  "gray-2": $gray-2,
+  "gray-3": $gray-3,
+  "accent-1": $accent-1,
+  "accent-2": $accent-2,
+  "accent-3": $accent-3
+);
+@each $name, $value in $color {
+  .color-#{$name} {
+    color: $value;
+  }
+  .bg-#{$name} {
+    background-color: $value;
+  }
+  .border-#{$name} {
+    border-color: $value;
+  }
+  .outline-#{$name} {
+    outline-color: $value;
+  }
+}
+
+@mixin flex($direction, $wrap) {
+  display: flex;
+  flex: {
+    direction: $direction;
+    wrap: $wrap;
+  }
+}
+$flex: (
+  r: (row, nowrap),
+  rr: (row-reverse, nowrap),
+  rw: (row, wrap),
+  rrw: (row-reverse, wrap),
+  rwr: (row, wrap-reverse),
+  rrwr: (row-reverse, wrap-reverse),
+  c: (column, nowrap),
+  cr: (column-reverse, nowrap),
+  cw: (column, wrap),
+  crw: (column-reverse, wrap),
+  cwr: (column, wrap-reverse),
+  crwr: (column-reverse, wrap-reverse)
+);
+@each $name, $value in $flex {
+  .f-#{$name} {
+    @include flex(list.nth($value, 1), list.nth($value, 2))
+  }
+}
+
+@mixin grid($direction, $value) {
+  display: grid;
+  grid-template-#{$direction}: repeat($value, 1fr);
+}
+$grid: (
+  rows, columns
+);
+@for $i from 1 to 10 {
+  @each $name in $grid {
+    .ga-#{$name}-#{$i} {
+      @include grid($name, $i)
+    }
+  }
+}
+
+$aligns: (
+  'center': center,
+  'start': flex-start,
+  'end': flex-end
+);
+@each $name, $value in $aligns {
+  .a-#{$name} {
+    align-items: $value;
+  }
+}
+
+$justifies: (
+  'center': center,
+  'start': flex-start,
+  'end': flex-end,
+  'between': space-between,
+  'around': space-around
+);
+@each $name, $value in $justifies {
+  .j-#{$name} {
+    justify-content: $value;
+  }
+}
+
+$side: (
+  top, bottom, left, right, all, h, v
+);
+@mixin padding($name, $i) {
+  @if $name == all {
+    padding: $i*$n;
+  } @else if $name == h {
+    padding-left: $i*$n;
+    padding-right: $i*$n;
+  } @else if $name == v {
+    padding-top: $i*$n;
+    padding-bottom: $i*$n;
+  } @else {
+    padding-#{$name}: $i*$n;
+  }
+}
+
+$radius-side: (
+  all, top-right, bottom-right, top-left, bottom-left, left, right, top, bottom
+);
+@mixin radius($name, $i) {
+  @if $name == all {
+    border-radius: $i*$n;
+  } @else if $name == left {
+    border-bottom-left-radius: $i*$n;
+    border-top-left-radius: $i*$n;
+  } @else if $name == right {
+    border-bottom-right-radius: $i*$n;
+    border-top-right-radius: $i*$n;
+  } @else if $name == top {
+    border-top-left-radius: $i*$n;
+    border-top-right-radius: $i*$n;
+  } @else if $name == bottom {
+    border-bottom-left-radius: $i*$n;
+    border-bottom-right-radius: $i*$n;
+  } @else {
+    border-#{$name}-radius: $i*$n;
+  }
+}
+
+$cursors: (
+  pointer, help, text, crosshair, default, auto, none, context-menu, progress, wait, cell, crosshair, vertical-text, alias, copy, move, no-drop, not-allowed, all-scroll, col-resize, row-resize, n-resize, e-resize, s-resize, w-resize, ns-resize, ew-resize, ne-resize, nw-resize, se-resize, sw-resize, nesw-resize, nwse-resize
+);
+@each $name in $cursors {
+  .c-#{$name} {
+    cursor: $name;
+  }
+}
+
+$content: (
+  'fit': fit-content,
+  'max': max-content,
+  'min': min-content
+);
+@each $name, $value in $content {
+  .w-#{$name} {
+    width: $value;
+  }
+  .h-#{$name} {
+    height: $value;
+  }
+}
+
+@for $i from 0 to 241 {
+  .gap-#{$i} {
+    gap: $i*$n;
+  }
+  @each $name in $side {
+    .pad-#{$name}-#{$i} {
+      @include padding($name, $i);
+    }
+  }
+  @each $name in $radius-side {
+    .rad-#{$name}-#{$i} {
+      @include radius($name, $i)
+    }
+  }
+}
+@for $i from 0 to 101 {
+  .w-#{$i} {
+    width: #{$i}+'%';
+  }
+  .h-#{$i} {
+    height: #{$i}+'%';
+  }
+}

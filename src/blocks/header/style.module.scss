@@ -1,0 +1,21 @@
+@use '@/styles/variables' as *;
+@use '@/styles/globals' as *;
+
+.header {
+  position: fixed;
+  top: 16*$n;
+}
+
+@media screen and (width >= 1920px) {
+  $adaptive: 240*$n;
+  .header {
+    padding: 0 $adaptive;
+  }
+}
+
+@media screen and (width >= 1440px) {
+  $adaptive: 160*$n;
+  .header {
+    padding: 0 $adaptive;
+  }
+}

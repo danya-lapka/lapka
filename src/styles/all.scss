@@ -1,0 +1,27 @@
+@use '@/styles/variables' as *;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+  transition: all .333s ease-out;
+}
+
+body {
+  background-color: $black;
+  color: $white;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 96*$n;
+  margin-top: 100*$n;
+}
+
+svg {
+  width: auto;
+  height: 1em;
+}

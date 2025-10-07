@@ -1,0 +1,54 @@
+@use '@/styles/variables' as *;
+@use '@/styles/globals' as *;
+@use 'sass:list';
+@use 'sass:map';
+
+@mixin mixin($c1, $c2, $c3, $c4) {
+  @extend 
+    .bg-#{$c1}, 
+    .color-#{$c3},
+    .rad-all-8, .pad-h-8, .pad-v-4, .c-pointer, .a-center;
+  &:hover {
+    @extend 
+      .bg-#{$c2}, 
+      .color-#{$c4};
+  }
+}
+$colors: (
+  "white": (
+    "bg": ("white", "gray-1"),
+    "color": ("black", "gray-3")
+  ),
+  "black": (
+    "bg": ("black", "gray-3"),
+    "color": ("white", "gray-1")
+  ),
+  "accent": (
+    "bg": ("accent", "accent-1"),
+    "color": ("black", "gray-3")
+  ),
+  "accent-alt": (
+    "bg": ("accent", "accent-3"),
+    "color": ("white", "gray-1")
+  ),
+  "white-accent": (
+    "bg": ("white", "accent"),
+    "color": ("black", "black")
+  ),
+  "black-accent": (
+    "bg": ("black", "accent"),
+    "color": ("white", "white")
+  )
+);
+@each $name, $value in $colors {
+  .#{$name}{
+    $bg-map: map.get($map: $value, $key: "bg");
+    $color-map: map.get($map: $value, $key: "color");
+    @include mixin(
+      list.nth($bg-map, 1),
+      list.nth($bg-map, 2),
+      list.nth($color-map, 1),
+      list.nth($color-map, 2)
+    )
+  }
+}

@@ -1,0 +1,15 @@
+@use '@/styles/variables' as *;
+
+@media screen and (width >= 1920px) {
+  $adaptive: 240*$n;
+  main {
+    padding: 0 $adaptive;
+  }
+}
+
+@media screen and (width >= 1440px) {
+  $adaptive: 160*$n;
+  main {
+    padding: 0 $adaptive;
+  }
+}

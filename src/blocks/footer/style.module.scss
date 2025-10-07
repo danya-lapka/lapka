@@ -1,0 +1,10 @@
+@use '@/styles/variables' as *;
+@use '@/styles/globals' as *;
+
+.footer {
+  margin-bottom: 16*$n;
+}
+
+.footer-logo {
+  font-size: 128*$n;
+}
