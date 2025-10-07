@@ -1,0 +1,8 @@
+@use '@/styles/variables' as *;
+@use '@/styles/globals' as *;
+
+.image {
+  &:hover {
+    filter: drop-shadow(0 0 4*$n $accent-1);
+  }
+}

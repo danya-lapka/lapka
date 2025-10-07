@@ -1,5 +1,5 @@
+import { Hello_Img } from "@/blocks";
 import { A } from "@/components"
-import Image from "next/image";
 import { Fragment } from "react";
 
 export default function Home() {
@@ -28,7 +28,7 @@ export default function Home() {
             </p>
           </div>
         </div>
-        <Image src={`/hello-image.png`} alt="boykisser"/>
+        <Hello_Img />
       </section>
       <section className="skills-section">
         <h1 className="heading-1">Скиллы <span className="heading-4">так называемые</span></h1>
