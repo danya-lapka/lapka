@@ -27,7 +27,7 @@ export default function Home() {
             </p>
           </div>
         </div>
-        <img src="/hello-image.png" alt="boykisser"/>
+        <img src={/hello-image.png} alt="boykisser"/>
       </section>
       <section className="skills-section">
         <h1 className="heading-1">Скиллы <span className="heading-4">так называемые</span></h1>
