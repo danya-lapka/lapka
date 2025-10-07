@@ -11,7 +11,7 @@ export function useSoundHold(soundPath: string, interval: number = 1100) {
     }
   }, [soundPath]);
 
-  const play = useCallback(() => {
+  const playHold = useCallback(() => {
     if (!audioRef.current) {
       initializeAudio();
     }
@@ -24,15 +24,15 @@ export function useSoundHold(soundPath: string, interval: number = 1100) {
     }
   }, [initializeAudio]);
 
-  const start = useCallback(() => {
+  const startHold = useCallback(() => {
     // Воспроизводим сразу
-    play();
+    playHold();
     
     // Устанавливаем интервал для повторения
-    intervalRef.current = setInterval(play, interval);
-  }, [play, interval]);
+    intervalRef.current = setInterval(playHold, interval);
+  }, [playHold, interval]);
 
-  const stop = useCallback(() => {
+  const stopHold = useCallback(() => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
@@ -46,12 +46,12 @@ export function useSoundHold(soundPath: string, interval: number = 1100) {
 
   // Очистка
   const cleanup = useCallback(() => {
-    stop();
-  }, [stop]);
+    stopHold();
+  }, [stopHold]);
 
   return {
-    start,
-    stop,
+    startHold,
+    stopHold,
     cleanup
   };
 }

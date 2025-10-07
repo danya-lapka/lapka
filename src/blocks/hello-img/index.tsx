@@ -1,37 +1,83 @@
 'use client';
 import Image from "next/image";
-import { Fragment, useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import styles from './style.module.scss';
 import clsx from "clsx";
-import { useSoundHold } from "@/hooks";
+import { useSound, useSoundHold } from "@/hooks";
+
+class SimpleInterval {
+  private timer: NodeJS.Timeout | null = null;
+  
+  start(callback: () => void, delay: number): void {
+    this.stop();
+    this.timer = setInterval(callback, delay);
+  }
+  
+  stop(): void {
+    if (this.timer) {
+      clearInterval(this.timer);
+      this.timer = null;
+    }
+  }
+  
+  isRunning(): boolean {
+    return this.timer !== null;
+  }
+}
 
 const Hello_Img = () => {
   const isProd = process.env.NODE_ENV === 'production';
   const [state, setState] = useState(false);
-  let url = state ? '/hello-img2': '/hello-img';
-  const { start, stop } = useSoundHold(`${isProd ? '/lapka' : ''}/sound/meow.mp3`, 1200);
+  let url = state ? '/hello-img2' : '/hello-img';
+  const Meow = useSound(`${isProd ? '/lapka' : ''}/sound/meow.mp3`);
+  const Purr = useSound(`${isProd ? '/lapka' : ''}/sound/purr.mp3`);
 
-  const meowing = () => {
-    setState(true); 
-    start();
+  const intervalRef = useRef<SimpleInterval>(new SimpleInterval());
+  const isPurrRef = useRef<boolean>(false);
+
+  const getRandomChance = (percent: number) => {
+    return Math.random() * 100 < percent;
   }
-  const stopMeowing = () => {
-    setState(false); 
-    stop();
-  }
+
+  const meowing = useCallback(() => {
+    setState(true);
+    const interval = intervalRef.current;
+    
+    interval.start(() => {
+      isPurrRef.current = getRandomChance(20);
+      if (isPurrRef.current) {
+        Meow.stop();
+        Purr.play();
+      } else {
+        Purr.stop();
+        Meow.play();
+      }
+    }, 1200);
+  }, [Meow, Purr]);
+
+  const stopMeowing = useCallback(() => {
+    setState(false);
+    const interval = intervalRef.current;
+    interval.stop();
+    Meow.stop();
+    Purr.stop();
+  }, [Meow, Purr]);
 
   return (
-    <Fragment>
-      <Image src={`${isProd ? '/lapka' : ''}${url}.png`} alt={url} fill className={clsx({
-        [`image c-pointer`]: true,
-        [styles[`image`]]: true
-      })}
-      onMouseDown={meowing}
-      onMouseUp={stopMeowing}
-      onMouseLeave={stopMeowing}
-      onTouchStart={meowing}
-      onTouchEnd={stopMeowing}/>
-    </Fragment>
+      <Image 
+        src={`${isProd ? '/lapka' : ''}${url}.png`} 
+        alt={url} 
+        fill 
+        className={clsx({
+          [`image c-pointer`]: true,
+          [styles[`image`]]: true
+        })}
+        onMouseDown={meowing}
+        onMouseUp={stopMeowing}
+        onMouseLeave={stopMeowing}
+        onTouchStart={meowing}
+        onTouchEnd={stopMeowing}
+      />
   )
 }
 
