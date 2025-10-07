@@ -1,5 +1,7 @@
 import { A } from "@/components"
+import Image from "next/image";
 import { Fragment } from "react";
+import hello_img from '/hello-image.png'
 
 export default function Home() {
 
@@ -27,7 +29,7 @@ export default function Home() {
             </p>
           </div>
         </div>
-        <img src="/hello-image.png" alt="boykisser"/>
+        <Image src={hello_img} alt="boykisser"/>
       </section>
       <section className="skills-section">
         <h1 className="heading-1">Скиллы <span className="heading-4">так называемые</span></h1>
