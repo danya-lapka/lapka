@@ -1,7 +1,7 @@
 import { A } from "@/components"
 import Image from "next/image";
 import { Fragment } from "react";
-import hello_img from '/hello-image.png'
+import hello_img from '../../public/hello-image.png'
 
 export default function Home() {
 

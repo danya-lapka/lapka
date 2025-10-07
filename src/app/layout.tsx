@@ -63,8 +63,8 @@ const body = localFont({
 })
 
 export const metadata: Metadata = {
-  title: "lapka-ui",
-  description: "UI library by danya_lapka"
+  title: "Danya_lapka",
+  description: "Dada"
 };
 
 export default function RootLayout(
