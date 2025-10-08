@@ -1,6 +1,6 @@
 import { BaseProps } from "../props";
 import Link from "next/link";
-import styles from './style.module.scss';
+import s from './style.module.scss';
 import clsx from "clsx";
 
 interface AProps extends BaseProps {
@@ -20,7 +20,7 @@ const A: React.FC<AProps> = ({
   return (
     <Link {...rest} href={href} target={target} className={clsx({
       [`${className}`]: className,
-      [styles[`${color}`]]: true
+      [s[`${color}`]]: true
     })}>
       {children}
     </Link>

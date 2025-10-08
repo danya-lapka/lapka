@@ -1,9 +1,8 @@
 'use client';
 import Image from "next/image";
 import { useState, useRef, useCallback } from "react";
-import styles from './style.module.scss';
-import clsx from "clsx";
-import { useSound, useSoundHold } from "@/hooks";
+import s from './style.module.scss';
+import { useSound } from "@/hooks";
 
 class SimpleInterval {
   private timer: NodeJS.Timeout | null = null;
@@ -27,10 +26,13 @@ class SimpleInterval {
 
 const Hello_Img = () => {
   const isProd = process.env.NODE_ENV === 'production';
+  const path = isProd ? '/lapka' : '';
+
   const [state, setState] = useState(false);
   let url = state ? '/hello-img2' : '/hello-img';
-  const Meow = useSound(`${isProd ? '/lapka' : ''}/sound/meow.mp3`);
-  const Purr = useSound(`${isProd ? '/lapka' : ''}/sound/purr.mp3`);
+  
+  const Meow = useSound(`${path}/sound/meow.mp3`);
+  const Purr = useSound(`${path}/sound/purr.mp3`);
 
   const intervalRef = useRef<SimpleInterval>(new SimpleInterval());
   const isPurrRef = useRef<boolean>(false);
@@ -64,19 +66,15 @@ const Hello_Img = () => {
   }, [Meow, Purr]);
 
   return (
-      <Image 
-        src={`${isProd ? '/lapka' : ''}${url}.png`} 
-        alt={url} 
-        fill 
-        className={clsx({
-          [`image c-pointer`]: true,
-          [styles[`image`]]: true
-        })}
-        onMouseDown={meowing}
-        onMouseUp={stopMeowing}
-        onMouseLeave={stopMeowing}
-        onTouchStart={meowing}
-        onTouchEnd={stopMeowing}
+      <Image className = {`${s[`image`]} image c-pointer`} 
+             src = {`${path}${url}.png`} 
+             alt = {url} 
+             fill
+             onMouseDown = {meowing}
+             onMouseUp = {stopMeowing}
+             onMouseLeave = {stopMeowing}
+             onTouchStart = {meowing}
+             onTouchEnd = {stopMeowing}
       />
   )
 }

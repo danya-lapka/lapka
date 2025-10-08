@@ -1,6 +1,5 @@
 import { A, Logo } from '@/components';
-import styles from './style.module.scss';
-import clsx from "clsx";
+import s from './style.module.scss';
 
 const Footer = () => {
 
@@ -45,14 +44,8 @@ const Footer = () => {
   ]
 
   return (
-    <footer className={clsx({
-      [styles[`footer`]]: true,
-      [`pad-v-48 f-r j-center a-center gap-96 bg-gray-3 rad-all-16`]: true
-    })}>
-      <ul className={clsx({
-      [styles[`footer-nav`]]: true,
-      [`body-4 f-c gap-8 a-end`]: true
-    })}>
+    <footer className = {`${s[`footer`]} pad-v-48 f-r j-center a-center gap-96 bg-gray-3 rad-all-16`}>
+      <ul className = {`${s[`footer-nav`]} body-4 f-c gap-8 a-end`}>
         {pages.map((i) => {
           return (
             <li key={i.name}>
@@ -61,26 +54,21 @@ const Footer = () => {
           )
         })}
         </ul>
-      <div className={clsx({
-        [styles[`footer-info`]]: true,
-        [`f-c a-center gap-20`]: true
-      })}>
-        <A href='/' color='white' className={clsx({
-        [styles[`footer-logo`]]: true,
-        [`f-r a-center`]: true
-      })}>
+      <div className = {`${s[`footer-info`]} f-c a-center gap-20`}>
+        <A className = {`${s[`footer-logo`]} f-r a-center`} 
+           href='/' 
+           color='white' 
+        >
           <Logo />
         </A>
-        <A className={clsx({
-          [`body-5`]: true
-        })} color='white' href='mailto:danya.lapka.partner@gmail.com'>
+        <A className={`body-5`} 
+           color='white' 
+           href='mailto:danya.lapka.partner@gmail.com'
+        >
           danya.lapka.partner@gmail.com
         </A>
       </div>
-      <ul className={clsx({
-      [styles[`footer-links`]]: true,
-      [`body-4 f-c gap-8 a-start`]: true
-    })}>
+      <ul className = {`${s[`footer-links`]} body-4 f-c gap-8 a-start`}>
         {links.map((i) => {
           return (
             <li key={i.name}>

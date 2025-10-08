@@ -1,5 +1,5 @@
 import { BaseProps } from "../props";
-import styles from './style.module.scss';
+import s from './style.module.scss';
 import clsx from "clsx";
 
 interface ButtonProps extends BaseProps {
@@ -17,7 +17,7 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <div {...rest} onClick={onClick} className={clsx({
       [`${className}`]: className,
-      [styles[`${color}`]]: true
+      [s[`${color}`]]: true
     })}>
       {children}
     </div>
