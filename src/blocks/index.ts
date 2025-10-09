@@ -1,5 +1,6 @@
 import { Footer } from "./footer";
 import { Header } from "./header";
-import { Hello_Img } from "./hello-img";
+import { HelloImg } from "./hello-img";
+import { SkillCard } from "./skill-card";
 
-export { Header, Footer, Hello_Img }
+export { Header, Footer, HelloImg, SkillCard }

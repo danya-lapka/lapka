@@ -1,5 +1,9 @@
 @use '@/styles/variables' as *;
 
+.hello-img {
+  width: 282*$n !important;
+}
+
 @media screen and (width >= 1920px) {
   $adaptive: 240*$n;
   main {
@@ -7,9 +11,43 @@
   }
 }
 
-@media screen and (width >= 1440px) {
+@media screen and (width < 1920px) {
   $adaptive: 160*$n;
   main {
     padding: 0 $adaptive;
+  }
+}
+
+@media screen and (width < 1440px) {
+  $adaptive: 64*$n;
+  main {
+    padding: 0 $adaptive;
+  }
+  .skills-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (width < 1024px) {
+  $adaptive: 16*$n;
+  main {
+    padding: 0 $adaptive;
+  }
+  .hello-img {
+    width: 192*$n !important;
+  }
+}
+
+@media screen and (width < 768px) {
+  $adaptive: 16*$n;
+  main {
+    padding: 0;
+    margin-top: 84*$n;
+    section {
+      padding: 0 $adaptive;
+    }
+  }
+  .skills-container {
+    grid-template-columns: repeat(1, 1fr);
   }
 }

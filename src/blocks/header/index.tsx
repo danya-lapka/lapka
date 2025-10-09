@@ -18,8 +18,8 @@ const Header = () => {
   ]
 
   return (
-    <header className = {`${s[`header`]} w-100`}>
-      <div className = {`${s[`header-container`]} f-r j-between a-center bg-gray-3 pad-h-24 pad-v-8 rad-all-16`}>
+    <header className = {`${s[`header`]}`}>
+      <div className = {`${s[`header-container`]} f-r j-between a-center pad-h-24 pad-v-8 rad-all-16`}>
       <A className = {`${s[`header-logo`]} heading-2 f-r a-center`} 
          href='/' 
          color='white'

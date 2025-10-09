@@ -3,25 +3,27 @@ import Link from "next/link";
 import s from './style.module.scss';
 import clsx from "clsx";
 
+type Colors = 'white' | 'black' | 'accent' | 'accent-alt' | 'white-accent' | 'black-accent' | 'accent-1' | 'accent-3';
+
 interface AProps extends BaseProps {
   href?: string,
   target?: string,
-  color?: string
+  color: Colors
 }
 
 const A: React.FC<AProps> = ({
   children,
   className,
-  color = 'white',
+  color,
   href = '#',
   target = '_self',
   ...rest
 }) => {
   return (
-    <Link {...rest} href={href} target={target} className={clsx({
-      [`${className}`]: className,
-      [s[`${color}`]]: true
-    })}>
+    <Link {...rest} 
+          href={href} 
+          target={target} 
+          className={clsx(s[color], className)}>
       {children}
     </Link>
   )

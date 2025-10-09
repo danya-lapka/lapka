@@ -3,11 +3,13 @@
 @use 'sass:list';
 @use 'sass:map';
 
+.class {
+  @extend .rad-all-8, .pad-h-8, .pad-v-4, .c-pointer, .a-center;
+}
 @mixin mixin($c1, $c2, $c3, $c4) {
   @extend 
     .bg-#{$c1}, 
-    .color-#{$c3},
-    .rad-all-8, .pad-h-8, .pad-v-4, .c-pointer, .a-center;
+    .color-#{$c3};
   &:hover {
     @extend 
       .bg-#{$c2}, 

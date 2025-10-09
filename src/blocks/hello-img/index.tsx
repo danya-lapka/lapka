@@ -24,7 +24,7 @@ class SimpleInterval {
   }
 }
 
-const Hello_Img = () => {
+const HelloImg = () => {
   const isProd = process.env.NODE_ENV === 'production';
   const path = isProd ? '/lapka' : '';
 
@@ -66,7 +66,7 @@ const Hello_Img = () => {
   }, [Meow, Purr]);
 
   return (
-      <Image className = {`${s[`image`]} image c-pointer`} 
+      <Image className = {`${s[`image`]} c-pointer hello-img`} 
              src = {`${path}${url}.png`} 
              alt = {url} 
              fill
@@ -79,4 +79,4 @@ const Hello_Img = () => {
   )
 }
 
-export { Hello_Img }
+export { HelloImg }
