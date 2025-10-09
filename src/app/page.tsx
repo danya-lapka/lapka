@@ -10,16 +10,16 @@ const HelloText = () => {
   return (
     <div className="body-4">
       <p>
-        Меня зовут Даниил(Даня) или как вам удобно. Мой ник — danya_lapka (Даня Лапка). Я фембой, люблю носить чулки, юбочку и другие милые вещички<span className="body-3">❣</span> Фоточки в
+        Меня зовут Даниил(Даня) или как вам удобно. Мой ник — danya_lapka (Даня Лапка). Я фембой, люблю носить чулки, юбочку и другие милые вещички<span className="body-3">❣</span> Фоточки в{`\u0020`}
         <A color="accent-1" target="_blank" href="https://t.me/danya_lapka">Telegram</A>
         . Мне 18 годиков.
       </p>
       <p>
-        Я люблю играть в разные игры, например Terraria, Hollow Knight, Dead Cells и другие, посмотреть меня можно на стримах
-        <A color="accent-1" target="_blank" href="https://www.twitch.tv/danya_lapka">Twitch</A>
-        или на видео
+        Я люблю играть в разные игры, например Terraria, Hollow Knight, Dead Cells и другие, посмотреть меня можно на стримах{`\u0020`}
+        <A color="accent-1" target="_blank" href="https://www.twitch.tv/danya_lapka">Twitch</A>{`\u0020`}
+        или на видео{`\u0020`}
         <A color="accent-1" target="_blank" href="https://www.youtube.com/@DanyaLapka">YouTube</A>.
-        В свободноe время я занимаюсь программированием, этот сайт я написал сам :3, вот мой
+        В свободноe время я занимаюсь программированием, этот сайт я написал сам :3, вот мой{`\u0020`}
         <A color="accent-1" target="_blank" href="https://github.com/danya-lapka"><FaGithub /> GitHub</A>.
       </p>
       <p>
