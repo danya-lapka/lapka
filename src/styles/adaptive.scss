@@ -23,9 +23,6 @@
   main {
     padding: 0 $adaptive;
   }
-  .skills-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 @media screen and (width < 1024px) {
@@ -46,8 +43,5 @@
     section {
       padding: 0 $adaptive;
     }
-  }
-  .skills-container {
-    grid-template-columns: repeat(1, 1fr);
   }
 }

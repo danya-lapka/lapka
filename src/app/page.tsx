@@ -1,17 +1,69 @@
+'use client';
 import { HelloImg, SkillCard } from "@/blocks";
-import { A } from "@/components"
+import { A, BaseProps } from "@/components"
+import { useViewport } from "@/hooks";
 import { Fragment } from "react";
 import { FaFigma, FaSass, FaGithub } from "react-icons/fa";
 import { SiNextdotjs, SiTypescript } from "react-icons/si";
 
+const HelloText = () => {
+  return (
+    <div className="body-4">
+      <p>
+        Меня зовут Даниил(Даня) или как вам удобно. Мой ник — danya_lapka (Даня Лапка). Я фембой, люблю носить чулки, юбочку и другие милые вещички<span className="body-3">❣</span> Фоточки в
+        <A color="accent-1" target="_blank" href="https://t.me/danya_lapka">Telegram</A>
+        . Мне 18 годиков.
+      </p>
+      <p>
+        Я люблю играть в разные игры, например Terraria, Hollow Knight, Dead Cells и другие, посмотреть меня можно на стримах
+        <A color="accent-1" target="_blank" href="https://www.twitch.tv/danya_lapka">Twitch</A>
+        или на видео
+        <A color="accent-1" target="_blank" href="https://www.youtube.com/@DanyaLapka">YouTube</A>.
+        В свободноe время я занимаюсь программированием, этот сайт я написал сам :3, вот мой
+        <A color="accent-1" target="_blank" href="https://github.com/danya-lapka"><FaGithub /> GitHub</A>.
+      </p>
+      <p>
+        <A color="accent-1" target="_blank" href="https://dalink.to/danya_lapka">Поддержать меня ❤</A>
+      </p>
+    </div>
+  )
+}
+const HelloHeading = () => {
+  return (
+    <h1 className="heading-1">Всем мяу</h1>
+  )
+}
+const Hello = () => {
+  const { width } = useViewport();
+  if (width < 768) {
+    return (
+      <section className="hello-section f-c">
+        <div className="hello-text h-min f-r">
+          <HelloHeading />
+          <HelloImg />
+        </div>
+        <HelloText />
+      </section>
+    )
+  } else {
+    return (
+      <section className="hello-section f-r">
+        <div className="hello-text h-min f-c gap-48">
+          <HelloHeading />
+          <HelloText />
+        </div>
+        <HelloImg />
+      </section>
+    )
+  }
 
-export default function Home() {
+}
 
-  const skills: {
-    name: string,
-    icon: React.ReactNode,
-    description: string
-  }[] = [
+const skills: {
+  name: string,
+  icon: React.ReactNode,
+  description: string
+}[] = [
     {
       name: 'Next.js',
       icon: <SiNextdotjs />,
@@ -33,49 +85,47 @@ export default function Home() {
       description: 'Figma — это облачный редактор для дизайна интерфейсов и прототипирования с возможностью совместной работы в реальном времени.'
     }
   ]
+const SkillsContainer: React.FC<BaseProps> = ({ className }) => {
+  return (
+    <div className={`skills-container a-start w-100 gap-24 j-center ${className}`}>
+      {skills.map((i) => {
+        return (
+          <SkillCard key={i.name}>
+            <SkillCard.Name>
+              <SkillCard.Icon>{i.icon}</SkillCard.Icon>
+              {i.name}
+            </SkillCard.Name>
+            <SkillCard.Description>{i.description}</SkillCard.Description>
+          </SkillCard>
+        );
+      })}
+    </div>
+  )
+}
+
+export default function Home() {
+  const { width } = useViewport();
+  let skillsContainerColumns: string = `ga-columns-`;
+
+  if (width < 768) {
+    skillsContainerColumns += 1;
+  } else if (width < 1024) {
+    skillsContainerColumns += 2;
+  } else if (width < 1440) {
+    skillsContainerColumns += 2;
+  } else if (width < 1920) {
+    skillsContainerColumns += 3;
+  } else {
+    skillsContainerColumns += 3;
+  }
 
   return (
     <Fragment>
-      <section className="hello-section f-r">
-        <div className="hello-text h-min f-c gap-48">
-          <h1 className="heading-1">Всем мяу</h1>
-          <div className="body-4">
-            <p>
-              Меня зовут Даниил(Даня) или как вам удобно. Мой ник — danya_lapka (Даня Лапка). Я фембой, люблю носить чулки, юбочку и другие милые вещички<span className="body-3">❣</span> Фоточки в 
-              <A color="accent-1" target="_blank" href="https://t.me/danya_lapka">Telegram</A>
-              . Мне 18 годиков.
-            </p>
-            <p>
-              Я люблю играть в разные игры, например Terraria, Hollow Knight, Dead Cells и другие, посмотреть меня можно на стримах 
-              <A color="accent-1" target="_blank" href="https://www.twitch.tv/danya_lapka">Twitch</A> 
-              или на видео 
-              <A color="accent-1" target="_blank" href="https://www.youtube.com/@DanyaLapka">YouTube</A>. 
-              В свободноe время я занимаюсь программированием, этот сайт я написал сам :3, вот мой 
-              <A color="accent-1" target="_blank" href="https://github.com/danya-lapka"><FaGithub /> GitHub</A>.
-            </p>
-            <p>
-              <A color="accent-1" target="_blank" href="https://dalink.to/danya_lapka">Поддержать меня ❤</A>
-            </p>
-          </div>
-        </div>
-        <HelloImg />
-      </section>
-      <section className="skills-section f-c gap-48">
-        <h1 className="heading-1">Скиллы <span className="heading-4">так называемые</span></h1>
-        <div className="skills-container ga-columns-3 a-start w-100 gap-24 j-center">
-          {skills.map((i) => {
-            return (
-              <SkillCard key={i.name}> 
-                <SkillCard.Name>
-                  <SkillCard.Icon>{i.icon}</SkillCard.Icon>
-                  {i.name}
-                </SkillCard.Name>
-                <SkillCard.Description>{i.description}</SkillCard.Description>
-              </SkillCard>
-            );
-          })}
-        </div>
-      </section>
+      <Hello />
+        <section className="skills-section f-c gap-48">
+          <h1 className="heading-1">Скиллы <span className="heading-4">так называемые</span></h1>
+          <SkillsContainer className={skillsContainerColumns}/>
+        </section>
     </Fragment>
-  );
+  )
 }

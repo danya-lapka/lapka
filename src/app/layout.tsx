@@ -5,6 +5,7 @@ import '@/styles/globals.scss';
 import '@/styles/all.scss';
 import '@/styles/adaptive.scss';
 import { Header, Footer } from "@/blocks";
+import { ViewportProvider } from "@/hooks";
 
 const heading = Unbounded({
   variable: "--font-heading",
@@ -74,11 +75,13 @@ export default function RootLayout(
   return (
     <html lang="ru">
       <body className={`${heading.variable} ${body.variable}`}>
-        <Header />
-        <main>
-          {children}
-          <Footer />
-        </main>
+        <ViewportProvider>
+          <Header />
+          <main>
+            {children}
+            <Footer />
+          </main>
+        </ViewportProvider>
       </body>
     </html>
   );

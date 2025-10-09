@@ -184,6 +184,10 @@ $content: (
   }
 }
 
+$absolute: (
+  top, bottom, right, left
+);
+
 @for $i from 0 to 241 {
   .gap-#{$i} {
     gap: $i*$n;
@@ -196,6 +200,14 @@ $content: (
   @each $name in $radius-side {
     .rad-#{$name}-#{$i} {
       @include radius($name, $i)
+    }
+  }
+  @each $name in $absolute {
+    .#{$name}-#{$i} {
+      #{$name}: $i*$n;
+    }
+    .margin-#{$name}-#{$i} {
+      margin-#{$name}: $i*$n;
     }
   }
 }
