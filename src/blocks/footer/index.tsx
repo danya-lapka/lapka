@@ -32,7 +32,7 @@ const Links: React.FC<BaseProps> = ({className}) => {
       {links.map((i) => {
         return (
           <li key={i.name}>
-            <A target="_blank" color='white' href={i.href}>{i.name}</A>
+            <A target="_blank" color='white' className='f-r gap-8' href={i.href}>{i.icon}{i.name}</A>
           </li>
         )
       })}
