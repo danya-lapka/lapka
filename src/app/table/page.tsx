@@ -70,11 +70,11 @@ export default function Page() {
   let id: number = 1;
   return (
     <div className="f-c gap-32">
-      <div className={`${s[`controls`]} f-r body-4 gap-8`}>
+      <div className={`${s[`controls`]} f-r body-4`}>
         <Button color="white" onClick={() => {setIsControl(!isControl)}}>
           Controls
         </Button>
-        <div className={clsx(`${s[`sorting`]} f-c body-4 gap-8 bg-gray-3`, {[s['sorting-show']]: isControl})}>
+        <div className={clsx(`${s[`sorting`]} f-c body-4 gap-8 bg-gray-3 pad-all-16 rad-all-8`, {[s['sorting-show']]: isControl})}>
           <Button onClick={() => {toggleSort("name")}} color="white">
             Name {sortKey === "name" && (sortOrder === "asc" ? <FaArrowUp /> : <FaArrowDown />)}
           </Button>
@@ -86,7 +86,7 @@ export default function Page() {
       <div className="f-c">
         <div className='f-r rad-top-16 body-4 gap-32 bg-white color-black a-center pad-v-12 pad-h-8'>
           <span className="w-100">Название</span>
-          <span className={`text-center w-15`}>Статус</span>
+          <span className={`text-center body-5 w-15`}>Статус</span>
           <span className="w-10 text-center">Плейлист</span>
         </div>
         {sorted.map((i) => {
@@ -119,7 +119,7 @@ export default function Page() {
           return (
             <div key={i.id} className={`f-r body-4 gap-32 bg-${bg} a-center pad-v-8 pad-h-8`}>
               <span className="w-100">{i.name}</span>
-              <span className={`bg-${status} color-black text-center w-15 pad-v-4 rad-all-4`}>
+              <span className={`bg-${status} color-black text-center body-5 w-15 pad-v-4 rad-all-4`}>
                 {i.status}
               </span>
               <A className="w-10 text-center" color={color} href={href}>{text}</A>
@@ -128,7 +128,7 @@ export default function Page() {
         })}
         <div className={`f-r body-4 gap-32 bg-white color-black a-center pad-v-8 pad-h-8 rad-bottom-16`}>
               <span className="w-100">Записи стримов</span>
-              <span className={`bg-accent color-black text-center w-15 pad-v-4 rad-all-4`}>
+              <span className={`bg-accent body-5 color-black text-center w-15 pad-v-4 rad-all-4`}>
                 Стримы
               </span>
               <A className="w-10 text-center" color='black' href='https://www.youtube.com/playlist?list=PLgPYefSLHqt-8RueFtkjDIXCgXp37XHBe'>Клик</A>
