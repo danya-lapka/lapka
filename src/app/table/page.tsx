@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { ContentTable } from "@/data/content";
-import { A, Button } from "@/components";
+import { A, Button, InputText } from "@/components";
 import { Colors } from "@/components/link";
 import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 import s from './style.module.scss';
@@ -25,6 +25,7 @@ export default function Page() {
 
   const [sortKey, setSortKey] = useState<SortKey>("status");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const statusOrder: Record<ContentTable["status"], number> = {
     playing: 1,
@@ -33,7 +34,11 @@ export default function Page() {
     dropped: 4,
   };
 
-  const sorted = [...table].sort((a, b) => {
+  const filtered = table.filter((item) =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const sorted = [...filtered].sort((a, b) => {
     const dir = sortOrder === "asc" ? 1 : -1;
 
     if (sortKey === "name") {
@@ -62,12 +67,12 @@ export default function Page() {
     );
   }
 
-  
-
   let id: number = 1;
   return (
     <div className="f-c gap-20">
-      <div className={`${s[`sorting`]} f-r w-fit body-5 gap-8`}>
+      <div className={`${s[`controls`]} f-rw a-center body-5 gap-16`}>
+        <InputText onChange={(e) => {setSearchQuery(e.target.value)}} className="w-80" color="white">Поиск</InputText>
+        <div className={`${s[`sorting`]} f-r body-5 gap-8`}>
           <Button className="j-between" onClick={() => {toggleSort("name")}} color="white">
             Name {sortKey === "name" && (sortOrder === "asc" ? <FaArrowUp /> : <FaArrowDown />)}
           </Button>
@@ -75,6 +80,7 @@ export default function Page() {
             Status {sortKey === "status" && (sortOrder === "asc" ? <FaArrowUp /> : <FaArrowDown />)}
           </Button>
         </div>
+      </div>
       <div className="f-c">
         <div className={`${s[`row`]} f-r rad-top-16 body-5 bg-white color-black a-center pad-v-12 pad-h-8`}>
           <span className="w-100">Название</span>

@@ -2,7 +2,7 @@ import { BaseProps } from "../props";
 import s from './style.module.scss';
 import clsx from "clsx";
 
-type Colors = 'white' | 'black' | 'accent' | 'accent-alt' | 'white-accent' | 'black-accent';
+type Colors = 'white'|'black'|'accent'|'accent-alt'|'white-accent'|'black-accent';
 
 interface ButtonProps extends BaseProps {
   color: Colors,

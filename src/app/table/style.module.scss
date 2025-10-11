@@ -6,3 +6,11 @@
     width: 110*$n;
   }
 }
+.controls {
+  label {
+    flex: 1 1 300px;
+    min-width: 200px;
+    height: auto;
+    align-self: center;
+  }
+}

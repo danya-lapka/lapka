@@ -1,0 +1,60 @@
+@use '@/styles/variables' as *;
+@use '@/styles/globals' as *;
+@use 'sass:list';
+
+.class {
+  @extend .pad-h-12, .pad-v-6, .c-text, .rad-all-8, .a-center, .body-5;
+  position: relative;
+  min-height: calc(1em + 12*$n);
+
+  input {
+    position: absolute;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    font: inherit;
+    width: calc(100% - 24*$n);
+  }
+
+  span {
+    position: absolute;
+  }
+
+  &:focus-within {
+    @extend .bg-accent;
+    span {
+      @extend .color-accent, .body-6;
+      transform:
+        translateY(calc(-100% - 8*$n)) translateX(-12*$n);
+    }
+  }
+}
+
+@mixin mixin($c1, $c2, $c3, $c4, $c5) {
+  @extend .bg-#{$c1},
+  .color-gray-2;
+  &:hover {
+    @extend .bg-#{$c2},
+    .color-#{$c3};
+  }
+  &:focus-within {
+    @extend .color-#{$c4};
+    &:hover {
+      @extend .bg-#{$c5};
+      span {
+        @extend .color-#{$c5};
+      }
+    }
+  }
+}
+
+$colors: (
+  "white": ("white", "gray-1", "black", "gray-3", "accent-1"),
+  "black": ("black", "gray-3", "white", "gray-1", "accent-3")
+);
+
+@each $name, $value in $colors {
+  .#{$name} {
+    @include mixin(list.nth($value, 1), list.nth($value, 2), list.nth($value, 3), list.nth($value, 4), list.nth($value, 5))
+  }
+}
