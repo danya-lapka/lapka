@@ -25,14 +25,12 @@ class SimpleInterval {
 }
 
 const HelloImg = () => {
-  const isProd = process.env.NODE_ENV === 'production';
-  const path = isProd ? '/lapka' : '';
 
   const [state, setState] = useState(false);
   let url = state ? '/hello-img2' : '/hello-img';
   
-  const Meow = useSound(`${path}/sound/meow.mp3`);
-  const Purr = useSound(`${path}/sound/purr.mp3`);
+  const Meow = useSound(`/sound/meow.mp3`);
+  const Purr = useSound(`/sound/purr.mp3`);
 
   const intervalRef = useRef<SimpleInterval>(new SimpleInterval());
   const isPurrRef = useRef<boolean>(false);
@@ -67,7 +65,7 @@ const HelloImg = () => {
 
   return (
       <Image className = {`${s[`image`]} c-pointer hello-img`} 
-             src = {`${path}${url}.png`} 
+             src = {`${url}.png`} 
              alt = {url} 
              fill
              onMouseDown = {meowing}

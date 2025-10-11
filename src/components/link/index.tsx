@@ -3,7 +3,7 @@ import Link from "next/link";
 import s from './style.module.scss';
 import clsx from "clsx";
 
-type Colors = 'white' | 'black' | 'accent' | 'accent-alt' | 'white-accent' | 'black-accent' | 'accent-1' | 'accent-3' | 'white-accent-alt' | 'black-accent-alt';
+export type Colors = 'white'|'black'|'accent'|'gray-3'|'gray-1'|'accent-alt'|'white-accent'|'black-accent'|'accent-1'|'accent-3'|'white-accent-alt'|'black-accent-alt'|'white-alt'|'black-alt';
 
 interface AProps extends BaseProps {
   href?: string,

@@ -1,0 +1,16 @@
+@use '@/styles/variables' as *;
+@use '@/styles/globals' as *;
+
+.controls {
+  .sorting {
+    position: absolute;
+    top: 100%;
+    opacity: 0;
+    z-index: 998;
+  }
+  &:hover {
+    .sorting {
+      opacity: 1;
+    }
+  }
+}
