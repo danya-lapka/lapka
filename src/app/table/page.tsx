@@ -5,6 +5,7 @@ import { A, Button } from "@/components";
 import { Colors } from "@/components/link";
 import { FaArrowDown, FaArrowUp, FaSort } from "react-icons/fa";
 import s from './style.module.scss';
+import clsx from "clsx";
 
 type SortKey = "name" | "status";
 type SortOrder = "asc" | "desc";
@@ -62,14 +63,16 @@ export default function Page() {
     );
   }
 
+  const [isControl, setIsControl] = useState(false);
+
   let id: number = 1;
   return (
     <div className="f-c gap-32">
       <div className={`${s[`controls`]} f-r body-4 gap-8`}>
-        <Button color="white">
+        <Button color="white" onClick={() => {setIsControl(!isControl)}}>
           Controls
         </Button>
-        <div className={`${s[`sorting`]} f-c body-4 gap-8 bg-gray-3`}>
+        <div className={clsx(`${s[`sorting`]} f-c body-4 gap-8 bg-gray-3`, {[s['sorting-show']]: isControl})}>
           <Button onClick={() => {toggleSort("name")}} color="white">
             Name {sortKey === "name" && (sortOrder === "asc" ? <FaArrowUp /> : <FaArrowDown />)}
           </Button>

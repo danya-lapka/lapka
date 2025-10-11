@@ -8,9 +8,7 @@
     opacity: 0;
     z-index: 998;
   }
-  &:hover {
-    .sorting {
-      opacity: 1;
-    }
+  .sorting-show {
+    opacity: 1;
   }
 }
