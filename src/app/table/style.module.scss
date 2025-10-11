@@ -2,6 +2,7 @@
 @use '@/styles/globals' as *;
 
 .controls {
+  position: relative;
   .sorting {
     position: absolute;
     top: 100%;
