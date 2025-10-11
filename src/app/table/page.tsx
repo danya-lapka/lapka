@@ -27,6 +27,8 @@ export default function Page() {
   const [sortKey, setSortKey] = useState<SortKey>("status");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
 
+  const [isControl, setIsControl] = useState(false);
+
   const statusOrder: Record<ContentTable["status"], number> = {
     playing: 1,
     planned: 2,
@@ -63,7 +65,7 @@ export default function Page() {
     );
   }
 
-  const [isControl, setIsControl] = useState(false);
+  
 
   let id: number = 1;
   return (
