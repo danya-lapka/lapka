@@ -4,7 +4,7 @@
 @use 'sass:map';
 
 .class {
-  @extend .rad-all-8, .pad-h-8, .pad-v-4, .c-pointer, .a-center;
+  @extend .rad-all-8, .pad-h-8, .pad-v-4, .c-pointer, .a-center, .f-r;
 }
 @mixin mixin($c1, $c2, $c3, $c4) {
   @extend 

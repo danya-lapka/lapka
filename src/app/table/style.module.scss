@@ -1,16 +1,8 @@
 @use '@/styles/variables' as *;
 @use '@/styles/globals' as *;
 
-.controls {
-  position: relative;
-  .sorting {
-    position: absolute;
-    bottom: 100%;
-    transform: translateY(-8*$n);
-    opacity: 0;
-    z-index: 998;
-  }
-  .sorting-show {
-    opacity: 1;
+.sorting {
+  div {
+    width: 110*$n;
   }
 }

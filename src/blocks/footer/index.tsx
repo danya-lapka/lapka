@@ -64,9 +64,11 @@ const Footer = () => {
 
   if (width < 768) {
     return (
-      <footer className={`${c.main} f-c gap-32 margin-bottom-0`}>
-        <Pages className={`${c.nav} a-center`}/>
-        <Links className={`${c.links} a-center`}/>
+      <footer className={`${c.main} f-c gap-32 margin-bottom-0 pad-h-32`}>
+        <div className='f-r j-between w-100'>
+          <Pages className={`${c.nav}`}/>
+          <Links className={`${c.links}`}/>
+        </div>
         <Info />
       </footer>
     );

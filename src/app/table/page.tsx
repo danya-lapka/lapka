@@ -3,9 +3,8 @@ import React, { useEffect, useState } from "react";
 import { ContentTable } from "@/data/content";
 import { A, Button } from "@/components";
 import { Colors } from "@/components/link";
-import { FaArrowDown, FaArrowUp, FaSort } from "react-icons/fa";
+import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 import s from './style.module.scss';
-import clsx from "clsx";
 
 type SortKey = "name" | "status";
 type SortOrder = "asc" | "desc";
@@ -26,8 +25,6 @@ export default function Page() {
 
   const [sortKey, setSortKey] = useState<SortKey>("status");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
-
-  const [isControl, setIsControl] = useState(false);
 
   const statusOrder: Record<ContentTable["status"], number> = {
     playing: 1,
@@ -69,25 +66,20 @@ export default function Page() {
 
   let id: number = 1;
   return (
-    <div className="f-c gap-32">
-      <div className={`${s[`controls`]} f-r body-4`}>
-        <Button color="white" onClick={() => {setIsControl(!isControl)}}>
-          Controls
-        </Button>
-        <div className={clsx(`${s[`sorting`]} f-c body-4 gap-8 bg-gray-3 pad-all-16 rad-all-8`, {[s['sorting-show']]: isControl})}>
-          <Button onClick={() => {toggleSort("name")}} color="white">
+    <div className="f-c gap-20">
+      <div className={`${s[`sorting`]} f-r w-fit body-5 gap-8`}>
+          <Button className="j-between" onClick={() => {toggleSort("name")}} color="white">
             Name {sortKey === "name" && (sortOrder === "asc" ? <FaArrowUp /> : <FaArrowDown />)}
           </Button>
-          <Button onClick={() => {toggleSort("status")}} color="white">
+          <Button className="j-between" onClick={() => {toggleSort("status")}} color="white">
             Status {sortKey === "status" && (sortOrder === "asc" ? <FaArrowUp /> : <FaArrowDown />)}
           </Button>
         </div>
-      </div>
       <div className="f-c">
-        <div className='f-r rad-top-16 body-4 gap-32 bg-white color-black a-center pad-v-12 pad-h-8'>
+        <div className={`${s[`row`]} f-r rad-top-16 body-5 bg-white color-black a-center pad-v-12 pad-h-8`}>
           <span className="w-100">Название</span>
-          <span className={`text-center body-5 w-15`}>Статус</span>
-          <span className="w-10 text-center">Плейлист</span>
+          <span className={`w-25 text-center ${s[`status-column`]}`}>Статус</span>
+          <span className="w-25 text-center">Ссылка</span>
         </div>
         {sorted.map((i) => {
           id++;
@@ -117,21 +109,21 @@ export default function Page() {
           bg = id % 2 == 0 ? 'black' : 'gray-3';
   
           return (
-            <div key={i.id} className={`f-r body-4 gap-32 bg-${bg} a-center pad-v-8 pad-h-8`}>
+            <div key={i.id} className={`${s[`row`]} f-r body-5 bg-${bg} a-center pad-v-8 pad-h-8`}>
               <span className="w-100">{i.name}</span>
-              <span className={`bg-${status} color-black text-center body-5 w-15 pad-v-4 rad-all-4`}>
+              <span className={`w-25 bg-${status} color-black text-center pad-v-4 rad-all-4 ${s[`status-column`]}`}>
                 {i.status}
               </span>
-              <A className="w-10 text-center" color={color} href={href}>{text}</A>
+              <A className="w-25 text-center" color={color} href={href}>{text}</A>
             </div>
           );
         })}
-        <div className={`f-r body-4 gap-32 bg-white color-black a-center pad-v-8 pad-h-8 rad-bottom-16`}>
+        <div className={`${s[`row`]} f-r body-5 bg-white color-black a-center pad-v-8 pad-h-8 rad-bottom-16`}>
               <span className="w-100">Записи стримов</span>
-              <span className={`bg-accent body-5 color-black text-center w-15 pad-v-4 rad-all-4`}>
+              <span className={`w-25 bg-accent color-black text-center pad-v-4 rad-all-4 ${s[`status-column`]}`}>
                 Стримы
               </span>
-              <A className="w-10 text-center" color='black' href='https://www.youtube.com/playlist?list=PLgPYefSLHqt-8RueFtkjDIXCgXp37XHBe'>Клик</A>
+              <A className="w-25 text-center" color='black' href='https://www.youtube.com/playlist?list=PLgPYefSLHqt-8RueFtkjDIXCgXp37XHBe'>Клик</A>
             </div>
       </div>
     </div>
