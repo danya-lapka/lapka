@@ -111,7 +111,7 @@ export default function Page() {
           return (
             <div key={i.id} className={`${s[`row`]} f-r body-5 bg-${bg} a-center pad-v-8 pad-h-8`}>
               <span className="w-100">{i.name}</span>
-              <span className={`w-25 bg-${status} color-black text-center pad-v-4 rad-all-4 ${s[`status-column`]}`}>
+              <span className={`w-25 bg-${status} color-black text-center pad-all-4 rad-all-4 ${s[`status-column`]}`}>
                 {i.status}
               </span>
               <A className="w-25 text-center" color={color} href={href}>{text}</A>
@@ -120,7 +120,7 @@ export default function Page() {
         })}
         <div className={`${s[`row`]} f-r body-5 bg-white color-black a-center pad-v-8 pad-h-8 rad-bottom-16`}>
               <span className="w-100">Записи стримов</span>
-              <span className={`w-25 bg-accent color-black text-center pad-v-4 rad-all-4 ${s[`status-column`]}`}>
+              <span className={`w-25 bg-accent color-black text-center pad-all-4 rad-all-4 ${s[`status-column`]}`}>
                 Стримы
               </span>
               <A className="w-25 text-center" color='black' href='https://www.youtube.com/playlist?list=PLgPYefSLHqt-8RueFtkjDIXCgXp37XHBe'>Клик</A>
