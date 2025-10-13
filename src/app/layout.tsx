@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Unbounded } from "next/font/google";
 import localFont from "next/font/local";
-import '@/styles/globals.scss';
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import '@/styles/all.scss';
+import '@/styles/globals.scss';
 import '@/styles/adaptive.scss';
 import { Header, Footer } from "@/blocks";
 import { ViewportProvider } from "@/hooks";

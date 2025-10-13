@@ -74,10 +74,10 @@ export default function Page() {
         <InputText onChange={(e) => {setSearchQuery(e.target.value)}} className="w-80" color="white">Поиск</InputText>
         <div className={`${s[`sorting`]} f-r body-5 gap-8`}>
           <Button className="j-between" onClick={() => {toggleSort("name")}} color="white">
-            Name {sortKey === "name" && (sortOrder === "asc" ? <FaArrowUp /> : <FaArrowDown />)}
+            Название {sortKey === "name" && (sortOrder === "asc" ? <FaArrowUp /> : <FaArrowDown />)}
           </Button>
           <Button className="j-between" onClick={() => {toggleSort("status")}} color="white">
-            Status {sortKey === "status" && (sortOrder === "asc" ? <FaArrowUp /> : <FaArrowDown />)}
+            Статус {sortKey === "status" && (sortOrder === "asc" ? <FaArrowUp /> : <FaArrowDown />)}
           </Button>
         </div>
       </div>
