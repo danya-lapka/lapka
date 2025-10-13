@@ -20,51 +20,33 @@
   }
   &:focus-within {
     @extend .bg-accent;
+    &:hover {
+      @extend .bg-accent;
+      span { color: $accent !important; }
+    }
   }
 }
 .class-default {
   @extend .class-root;
-  &:focus-within {
-    span {
-      @extend .color-accent;
-    }
-  }
+  &:focus-within { span { @extend .color-accent; } }
   &.valid, &:focus-within {
     span {
       @extend .body-6, .j-start;
-      transform:
-        translateY(calc(-100% - 8*$n)) 
-        translateX(-12*$n);
+      transform: translateY(calc(-100% - 8*$n)) translateX(-12*$n);
     }
   }
 }
 .class-placeholder {
   @extend .class-root;
-  &.valid {
-    span {
-      opacity: 0;
-    }
-  }
+  &.valid { span { opacity: 0; } }
 }
 @mixin mixin($c1, $c2, $c3, $c4) {
-  @extend .bg-#{$c1},
-  .color-gray-2;
-  &:hover {
-    @extend .bg-#{$c2},
-    .color-#{$c3};
-  }
-  &:focus-within {
-    @extend .color-#{$c4};
-  }
+  @extend .bg-#{$c1}, .color-gray-2;
+  &:hover { @extend .bg-#{$c2}, .color-#{$c3}; }
+  &:focus-within { @extend .color-#{$c4}; }
   &.valid {
-    span {
-      @extend .color-#{$c1};
-    }
-    &:hover {
-      span {
-        @extend .color-#{$c2};
-      }
-    }
+    span { @extend .color-#{$c1}; }
+    &:hover { span { @extend .color-#{$c2}; } }
   }
 }
 $colors: (
