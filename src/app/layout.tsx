@@ -76,6 +76,7 @@ export default function RootLayout(
   return (
     <html lang="ru">
       <body className={`${heading.variable} ${body.variable}`}>
+        <SpeedInsights/>
         <ViewportProvider>
           <Header />
           <main>
