@@ -2,11 +2,10 @@
 @use '@/styles/globals' as *;
 @use 'sass:list';
 
-.class {
+.class-root {
   @extend .pad-h-12, .pad-v-6, .c-text, .rad-all-8, .a-center, .body-5;
   position: relative;
   min-height: calc(1em + 12*$n);
-
   input {
     position: absolute;
     background-color: transparent;
@@ -15,22 +14,39 @@
     font: inherit;
     width: calc(100% - 24*$n);
   }
-
   span {
     position: absolute;
+    width: calc(100% - 24*$n);
   }
-
   &:focus-within {
     @extend .bg-accent;
+  }
+}
+.class-default {
+  @extend .class-root;
+  &:focus-within {
     span {
-      @extend .color-accent, .body-6;
+      @extend .color-accent;
+    }
+  }
+  &.valid, &:focus-within {
+    span {
+      @extend .body-6, .j-start;
       transform:
-        translateY(calc(-100% - 8*$n)) translateX(-12*$n);
+        translateY(calc(-100% - 8*$n)) 
+        translateX(-12*$n);
     }
   }
 }
-
-@mixin mixin($c1, $c2, $c3, $c4, $c5) {
+.class-placeholder {
+  @extend .class-root;
+  &.valid {
+    span {
+      opacity: 0;
+    }
+  }
+}
+@mixin mixin($c1, $c2, $c3, $c4) {
   @extend .bg-#{$c1},
   .color-gray-2;
   &:hover {
@@ -39,22 +55,24 @@
   }
   &:focus-within {
     @extend .color-#{$c4};
+  }
+  &.valid {
+    span {
+      @extend .color-#{$c1};
+    }
     &:hover {
-      @extend .bg-#{$c5};
       span {
-        @extend .color-#{$c5};
+        @extend .color-#{$c2};
       }
     }
   }
 }
-
 $colors: (
-  "white": ("white", "gray-1", "black", "gray-3", "accent-1"),
-  "black": ("black", "gray-3", "white", "gray-1", "accent-3")
+  "white": ("white", "gray-1", "black", "gray-3"),
+  "black": ("black", "gray-3", "white", "gray-1")
 );
-
 @each $name, $value in $colors {
   .#{$name} {
-    @include mixin(list.nth($value, 1), list.nth($value, 2), list.nth($value, 3), list.nth($value, 4), list.nth($value, 5))
+    @include mixin(list.nth($value, 1), list.nth($value, 2), list.nth($value, 3), list.nth($value, 4))
   }
 }

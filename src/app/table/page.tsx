@@ -71,7 +71,7 @@ export default function Page() {
   return (
     <div className="f-c gap-20">
       <div className={`${s[`controls`]} f-rw a-center body-5 gap-16`}>
-        <InputText onChange={(e) => {setSearchQuery(e.target.value)}} className="w-80" color="white">Поиск</InputText>
+        <InputText search onChange={(e) => {setSearchQuery(e.target.value)}} className="w-80" color="white">Поиск</InputText>
         <div className={`${s[`sorting`]} f-r body-5 gap-8`}>
           <Button className="j-between" onClick={() => {toggleSort("name")}} color="white">
             Название {sortKey === "name" && (sortOrder === "asc" ? <FaArrowUp /> : <FaArrowDown />)}
