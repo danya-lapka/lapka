@@ -104,21 +104,21 @@ export default function Page() {
           }
   
           let status: string;
+          let statusText: string;
           switch (i.status) {
-            case 'playing': status = 'warn'; break;
-            case 'completed': status = 'success'; break;
-            case 'dropped': status = 'error'; break;
-            case 'planned': status = 'info'; break;
+            case 'playing': status = 'warn'; statusText = 'Играю'; break;
+            case 'completed': status = 'success'; statusText = 'Прошёл'; break;
+            case 'dropped': status = 'error'; statusText = 'Бросил'; break;
+            case 'planned': status = 'info'; statusText = 'В планах'; break;
           }
   
-          let bg: string;
-          bg = id % 2 == 0 ? 'black' : 'gray-3';
-  
+          let bg: string = id % 2 == 0 ? 'black' : 'gray-3';
+
           return (
             <div key={i.id} className={`${s[`row`]} f-r body-5 bg-${bg} a-center pad-v-8 pad-h-8`}>
               <span className="w-100">{i.name}</span>
               <span className={`w-25 bg-${status} color-black text-center pad-all-4 rad-all-4 ${s[`status-column`]}`}>
-                {i.status}
+                {statusText}
               </span>
               <A className="w-25 text-center" color={color} href={href}>{text}</A>
             </div>
