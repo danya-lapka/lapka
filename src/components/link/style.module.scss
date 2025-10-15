@@ -8,24 +8,51 @@
     @extend .color-#{$c2};
   }
 }
-$colors: (
+$colorsDefault: (
   "white": ("white", "gray-1"),
   "black": ("black", "gray-3"),
-  "white-alt": ("gray-2", "white"),
-  "black-alt": ("gray-2", "black"),
-  "accent": ("accent", "accent-1"),
-  "gray-3": ("gray-3", "black"),
   "gray-1": ("gray-1", "white"),
-  "accent-alt": ("accent", "accent-3"),
+  "gray-3": ("gray-3", "black"),
+  "white-gray-2": ("gray-2", "white"),
+  "black-gray-2": ("gray-2", "black"),
   "white-accent": ("white", "accent"),
   "black-accent": ("black", "accent"),
   "white-accent-alt": ("white", "accent-3"),
   "black-accent-alt": ("black", "accent-3"),
+  "accent": ("accent", "accent-1"),
+  "accent-alt": ("accent", "accent-3"),
   "accent-1": ("accent-1", "accent"),
   "accent-3": ("accent-3", "accent")
 );
-@each $name, $value in $colors {
+@each $name, $value in $colorsDefault {
   .#{$name} {
     @include mixin(list.nth($value, 1), list.nth($value, 2));
+  }
+}
+
+@mixin mixin-outline($c1) {
+  @extend .color-#{$c1};
+  &::after {
+    content: "";
+    display: block;
+    position: absolute;
+    bottom: -4*$n;
+    height: 2*$n;
+    width: 0;
+    @extend .bg-#{$c1};
+    transition: all .333s ease-out;
+  }
+  &:hover {
+    &::after {
+      width: 100%;
+    }
+  }
+}
+$colorsUnderline: (
+  "white", "black", "gray-1", "gray-2", "gray-3", "accent", "accent-1", "accent-2", "accent-3"
+);
+@each $name in $colorsUnderline {
+  .#{$name}-underline {
+    @include mixin-outline($name)
   }
 }

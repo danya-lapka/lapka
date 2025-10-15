@@ -13,15 +13,16 @@
     border: none;
     font: inherit;
     width: calc(100% - 24*$n);
+    color: inherit;
   }
   span {
     position: absolute;
     width: calc(100% - 24*$n);
   }
   &:focus-within {
-    @extend .bg-accent;
+    @extend .bg-accent, .outline-accent;
     &:hover {
-      @extend .bg-accent;
+      @extend .bg-accent, .outline-accent;
       span { color: $accent !important; }
     }
   }
@@ -40,6 +41,7 @@
   @extend .class-root;
   &.valid { span { opacity: 0; } }
 }
+
 @mixin mixin($c1, $c2, $c3, $c4) {
   @extend .bg-#{$c1}, .color-gray-2;
   &:hover { @extend .bg-#{$c2}, .color-#{$c3}; }
@@ -49,12 +51,34 @@
     &:hover { span { @extend .color-#{$c2}; } }
   }
 }
-$colors: (
+$colorsDefault: (
   "white": ("white", "gray-1", "black", "gray-3"),
   "black": ("black", "gray-3", "white", "gray-1")
 );
-@each $name, $value in $colors {
-  .#{$name} {
+@each $name, $value in $colorsDefault {
+  .#{$name}-default {
     @include mixin(list.nth($value, 1), list.nth($value, 2), list.nth($value, 3), list.nth($value, 4))
+  }
+}
+
+@mixin mixin-outline($c1, $c2) {
+  @extend .outline-#{$c1}, .color-#{$c1};
+  &:hover { @extend .outline-#{$c2}, .color-#{$c2}; }
+  &:focus-within { 
+    @extend .color-#{$c1};
+    input { color: $accent !important; } 
+  }
+  &.valid {
+    span { @extend .color-#{$c1}; }
+    &:hover { span { @extend .color-#{$c2}; } }
+  }
+}
+$colorsOutline: (
+  "white": ("white", "gray-1"),
+  "black": ("black", "gray-3")
+);
+@each $name, $value in $colorsOutline {
+  .#{$name}-outline {
+    @include mixin-outline(list.nth($value, 1), list.nth($value, 2))
   }
 }

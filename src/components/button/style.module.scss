@@ -6,6 +6,49 @@
 .class {
   @extend .rad-all-8, .pad-h-8, .pad-v-4, .c-pointer, .a-center, .f-r;
 }
+
+$colorsDefault: (
+  "white": (
+    "bg": ("white", "gray-1"),
+    "color": ("black", "gray-3")
+  ),
+  "black": (
+    "bg": ("black", "gray-3"),
+    "color": ("white", "gray-1")
+  ),
+  "gray-1": (
+    "bg": ("gray-1", "white"),
+    "color": ("black", "black")
+  ),
+  "gray-3": (
+    "bg": ("gray-3", "black"),
+    "color": ("white", "white")
+  ),
+  "white-accent": (
+    "bg": ("white", "accent"),
+    "color": ("black", "black")
+  ),
+  "black-accent": (
+    "bg": ("black", "accent"),
+    "color": ("white", "white")
+  ),
+  "accent": (
+    "bg": ("accent", "accent-1"),
+    "color": ("black", "gray-3")
+  ),
+  "accent-alt": (
+    "bg": ("accent", "accent-3"),
+    "color": ("white", "gray-1")
+  ),
+  "accent-1": (
+    "bg": ("accent-1", "accent"),
+    "color": ("black", "black")
+  ),
+  "accent-3": (
+    "bg": ("accent-3", "accent"),
+    "color": ("white", "white")
+  )
+);
 @mixin mixin($c1, $c2, $c3, $c4) {
   @extend 
     .bg-#{$c1}, 
@@ -16,34 +59,8 @@
       .color-#{$c4};
   }
 }
-$colors: (
-  "white": (
-    "bg": ("white", "gray-1"),
-    "color": ("black", "gray-3")
-  ),
-  "black": (
-    "bg": ("black", "gray-3"),
-    "color": ("white", "gray-1")
-  ),
-  "accent": (
-    "bg": ("accent", "accent-1"),
-    "color": ("black", "gray-3")
-  ),
-  "accent-alt": (
-    "bg": ("accent", "accent-3"),
-    "color": ("white", "gray-1")
-  ),
-  "white-accent": (
-    "bg": ("white", "accent"),
-    "color": ("black", "black")
-  ),
-  "black-accent": (
-    "bg": ("black", "accent"),
-    "color": ("white", "white")
-  )
-);
-@each $name, $value in $colors {
-  .#{$name}{
+@each $name, $value in $colorsDefault {
+  .#{$name}-default{
     $bg-map: map.get($map: $value, $key: "bg");
     $color-map: map.get($map: $value, $key: "color");
     @include mixin(
@@ -51,6 +68,34 @@ $colors: (
       list.nth($bg-map, 2),
       list.nth($color-map, 1),
       list.nth($color-map, 2)
-    )
+    );
+  }
+}
+
+$colorsOutline: (
+  "white": ("white", "gray-1"),
+  "black": ("black", "gray-3"),
+  "gray-1": ("gray-1", "white"),
+  "gray-3": ("gray-3", "black"),
+  "white-accent": ("white", "accent"),
+  "black-accent": ("black", "accent"),
+  "accent": ("accent", "accent-1"),
+  "accent-alt": ("accent", "accent-3"),
+  "accent-1": ("accent-1", "accent"),
+  "accent-3": ("accent-3", "accent")
+);
+@mixin mixin-outline($c1, $c2) {
+  @extend 
+    .outline-#{$c1},
+    .color-#{$c1};
+  &:hover {
+    @extend 
+    .outline-#{$c2},
+    .color-#{$c2};
+  }
+}
+@each $name, $value in $colorsOutline {
+  .#{$name}-outline {
+    @include mixin-outline(list.nth($value, 1), list.nth($value, 2));
   }
 }

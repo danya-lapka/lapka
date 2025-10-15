@@ -1,5 +1,5 @@
 'use client';
-import { ChangeEvent, Fragment, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { BaseProps } from "../props";
 import s from './style.module.scss';
 import clsx from "clsx";
@@ -15,7 +15,8 @@ interface inputTextProps extends BaseProps {
   search?: boolean,
   password?: boolean,
   pattern?: string,
-  style?: "default" | "placeholder"
+  variant?: "default" | "outline",
+  hint?: "default" | "placeholder",
 }
 
 const InputText: React.FC<inputTextProps> = ({
@@ -28,7 +29,8 @@ const InputText: React.FC<inputTextProps> = ({
   search,
   password,
   pattern,
-  style = "default",
+  variant = "default",
+  hint = "default",
   ...rest
 }) => {
   const [isValid, setIsValid] = useState(false);
@@ -39,7 +41,10 @@ const InputText: React.FC<inputTextProps> = ({
   return (
     <label {...rest}
       style={{ width: `${width! / 16}rem` }}
-      className={clsx(s[`class-${style}`], s[color], className, { [s[`valid`]]: isValid })}>
+      className={clsx(s[`class-${hint}`], s[`${color}-${variant}`], className, { 
+        [s[`valid`]]: isValid,
+        [`outline`]: variant == "outline"
+      })}>
       <span className="f-r gap-8 j-between">{children}{search ? <FaSearch /> : ""}</span>
       <input onChange={(e) => {
         onChange(e);

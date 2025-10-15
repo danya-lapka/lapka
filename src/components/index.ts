@@ -2,10 +2,10 @@ import { BaseProps } from "./props";
 export type { BaseProps };
 
 import { Button } from "./button";
-import { A } from "./link";
+import { A, AUnderline } from "./link";
 import { InputText } from "./inputText";
 
-export { A, Button, InputText }
+export { A, AUnderline, Button, InputText }
 
 
 import { Logo } from "./icons";

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { ContentTable } from "@/data/content";
 import { A, Button, InputText } from "@/components";
-import { Colors } from "@/components/link";
+import { ColorsDefault } from "@/components/link";
 import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 import s from './style.module.scss';
 
@@ -89,7 +89,7 @@ export default function Page() {
         </div>
         {sorted.map((i) => {
           id++;
-          let color: Colors;
+          let color: ColorsDefault;
           let text: string;
           let href: string;
   
@@ -98,7 +98,7 @@ export default function Page() {
             text = 'Клик';
             href = i.playlist;
           } else {
-            color = 'white-alt';
+            color = 'white-gray-2';
             text = 'Нету';
             href = '#';
           }

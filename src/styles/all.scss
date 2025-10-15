@@ -8,6 +8,7 @@
   list-style: none;
   transition: all .333s ease-out;
   max-width: 100cqw;
+  position: relative;
 }
 
 body {
@@ -51,4 +52,11 @@ html {
   &::-webkit-scrollbar-corner {
     background-color: $black;
   }
+}
+
+.outline {
+  outline-width: 2*$n;
+  outline-offset: -2*$n;
+  outline-style: solid;
+  background-color: transparent !important;
 }
