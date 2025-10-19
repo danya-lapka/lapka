@@ -217,6 +217,12 @@ $absolute: (
       margin-#{$name}: $i*$n;
     }
   }
+  .w-n#{$i} {
+    width: $i*$n;
+  }
+  .h-n#{$i} {
+    height: $i*$n;
+  }
 }
 @for $i from 0 to 101 {
   .w-#{$i} {

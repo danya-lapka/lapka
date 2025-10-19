@@ -1,11 +1,6 @@
 @use '@/styles/variables' as *;
 @use '@/styles/globals' as *;
 
-.sorting {
-  div {
-    width: 125*$n;
-  }
-}
 .controls {
   label {
     flex: 1 1 300px;

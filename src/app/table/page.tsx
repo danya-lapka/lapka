@@ -73,10 +73,10 @@ export default function Page() {
       <div className={`${s[`controls`]} f-rw a-center body-5 gap-16`}>
         <InputText search onChange={(e) => {setSearchQuery(e.target.value)}} className="w-80" color="white">Поиск</InputText>
         <div className={`${s[`sorting`]} f-r body-5 gap-8`}>
-          <Button className="j-between" onClick={() => {toggleSort("name")}} color="white">
+          <Button className="j-between w-n125" onClick={() => {toggleSort("name")}} color="white">
             Название {sortKey === "name" && (sortOrder === "asc" ? <FaArrowUp /> : <FaArrowDown />)}
           </Button>
-          <Button className="j-between" onClick={() => {toggleSort("status")}} color="white">
+          <Button className="j-between w-n125" onClick={() => {toggleSort("status")}} color="white">
             Статус {sortKey === "status" && (sortOrder === "asc" ? <FaArrowUp /> : <FaArrowDown />)}
           </Button>
         </div>
@@ -84,8 +84,8 @@ export default function Page() {
       <div className="f-c">
         <div className={`${s[`row`]} f-r rad-top-16 body-5 bg-white color-black a-center pad-v-12 pad-h-8`}>
           <span className="w-100">Название</span>
-          <span className={`w-25 text-center ${s[`status-column`]}`}>Статус</span>
-          <span className="w-25 text-center">Ссылка</span>
+          <span className={`w-n145 f-r a-center j-center ${s[`status-column`]}`}>Статус</span>
+          <span className="w-n110 text-center">Ссылка</span>
         </div>
         {sorted.map((i) => {
           id++;
@@ -117,19 +117,19 @@ export default function Page() {
           return (
             <div key={i.id} className={`${s[`row`]} f-r body-5 bg-${bg} a-center pad-v-8 pad-h-8`}>
               <span className="w-100">{i.name}</span>
-              <span className={`w-25 bg-${status} color-black text-center pad-all-4 rad-all-4 ${s[`status-column`]}`}>
+              <span className={`w-n145 bg-${status} color-black text-center pad-all-4 rad-all-4 ${s[`status-column`]}`}>
                 {statusText}
               </span>
-              <A className="w-25 text-center" color={color} href={href}>{text}</A>
+              <A className="w-n110 text-center" color={color} href={href}>{text}</A>
             </div>
           );
         })}
         <div className={`${s[`row`]} f-r body-5 bg-white color-black a-center pad-v-8 pad-h-8 rad-bottom-16`}>
               <span className="w-100">Записи стримов</span>
-              <span className={`w-25 bg-accent color-black text-center pad-all-4 rad-all-4 ${s[`status-column`]}`}>
+              <span className={`w-n145 bg-accent color-black text-center pad-all-4 rad-all-4 ${s[`status-column`]}`}>
                 Стримы
               </span>
-              <A className="w-25 text-center" color='black' href='https://www.youtube.com/playlist?list=PLgPYefSLHqt-8RueFtkjDIXCgXp37XHBe'>Клик</A>
+              <A className="w-n110 text-center" color='black' href='https://www.youtube.com/playlist?list=PLgPYefSLHqt-8RueFtkjDIXCgXp37XHBe'>Клик</A>
             </div>
       </div>
     </div>
