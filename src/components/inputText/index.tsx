@@ -17,6 +17,7 @@ interface inputTextProps extends BaseProps {
   pattern?: string,
   variant?: "default" | "outline",
   hint?: "default" | "placeholder",
+  value?: string
 }
 
 const InputText: React.FC<inputTextProps> = ({
@@ -31,6 +32,7 @@ const InputText: React.FC<inputTextProps> = ({
   pattern,
   variant = "default",
   hint = "default",
+  value,
   ...rest
 }) => {
   const [isValid, setIsValid] = useState(false);

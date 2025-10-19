@@ -42,7 +42,11 @@ $color: (
   "success": $success,
   "warn": $warn,
   "error": $error,
-  "info": $info
+  "info": $info,
+  "success-alt": $success-alt,
+  "warn-alt": $warn-alt,
+  "error-alt": $error-alt,
+  "info-alt": $info-alt
 );
 @each $name, $value in $color {
   .color-#{$name} {
@@ -195,7 +199,7 @@ $absolute: (
   top, bottom, right, left
 );
 
-@for $i from 0 to 241 {
+@for $i from 0 to 261 {
   .gap-#{$i} {
     gap: $i*$n;
   }
@@ -222,6 +226,9 @@ $absolute: (
   }
   .h-n#{$i} {
     height: $i*$n;
+  }
+  .f-#{$i} {
+    flex: 0 0 $i*$n;
   }
 }
 @for $i from 0 to 101 {

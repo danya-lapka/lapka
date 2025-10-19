@@ -32,6 +32,11 @@ img {
   position: relative !important;
 }
 
+button {
+  border: none;
+  font: inherit;
+}
+
 html {
   &::-webkit-scrollbar {
     width: 4*$n;
@@ -59,4 +64,12 @@ html {
   outline-offset: -2*$n;
   outline-style: solid;
   background-color: transparent !important;
+}
+
+.none {
+  display: none;
+}
+
+.fixed {
+  position: fixed;
 }

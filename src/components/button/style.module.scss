@@ -47,6 +47,22 @@ $colorsDefault: (
   "accent-3": (
     "bg": ("accent-3", "accent"),
     "color": ("white", "white")
+  ),
+  "info": (
+    "bg": ("info", "info-alt"),
+    "color": ("white", "gray-1")
+  ),
+  "warn": (
+    "bg": ("warn", "warn-alt"),
+    "color": ("black", "gray-3")
+  ),
+  "error": (
+    "bg": ("error", "error-alt"),
+    "color": ("white", "gray-1")
+  ),
+  "success": (
+    "bg": ("success", "success-alt"),
+    "color": ("black", "gray-3")
   )
 );
 @mixin mixin($c1, $c2, $c3, $c4) {
@@ -82,7 +98,11 @@ $colorsOutline: (
   "accent": ("accent", "accent-1"),
   "accent-alt": ("accent", "accent-3"),
   "accent-1": ("accent-1", "accent"),
-  "accent-3": ("accent-3", "accent")
+  "accent-3": ("accent-3", "accent"),
+  "info": ("info", "info-alt"),
+  "error": ("error", "error-alt"),
+  "warn": ("warn", "warn-alt"),
+  "success": ("success", "success-alt")
 );
 @mixin mixin-outline($c1, $c2) {
   @extend 
@@ -98,4 +118,9 @@ $colorsOutline: (
   .#{$name}-outline {
     @include mixin-outline(list.nth($value, 1), list.nth($value, 2));
   }
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.1;
 }

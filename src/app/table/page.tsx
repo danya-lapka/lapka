@@ -4,12 +4,16 @@ import { ContentTable } from "@/data/content";
 import { A, Button, InputText } from "@/components";
 import { ColorsDefault } from "@/components/link";
 import { FaArrowDown, FaArrowUp } from "react-icons/fa";
+import { useSearchParams } from "next/navigation";
 import s from './style.module.scss';
 
 type SortKey = "name" | "status";
 type SortOrder = "asc" | "desc";
 
 export default function Page() {
+  const searchParams = useSearchParams();
+  const name = searchParams.get("name");
+
   const [table, setTable] = useState<ContentTable[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -26,6 +30,7 @@ export default function Page() {
   const [sortKey, setSortKey] = useState<SortKey>("status");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const statusOrder: Record<ContentTable["status"], number> = {
     playing: 1,
@@ -61,6 +66,18 @@ export default function Page() {
     }
   };
 
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil(sorted.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentItems = sorted.slice(startIndex, startIndex + itemsPerPage);
+
+  const changePage = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   if (loading) {
     return (
       <div className="skeleton-table"></div>
@@ -84,10 +101,10 @@ export default function Page() {
       <div className="f-c">
         <div className={`${s[`row`]} f-r rad-top-16 body-5 bg-white color-black a-center pad-v-12 pad-h-8`}>
           <span className="w-100">Название</span>
-          <span className={`w-n145 f-r a-center j-center ${s[`status-column`]}`}>Статус</span>
-          <span className="w-n110 text-center">Ссылка</span>
+          <span className={`f-110 f-r a-center j-center ${s[`status-column`]}`}>Статус</span>
+          <span className="f-80 f-r a-center j-center">Ссылка</span>
         </div>
-        {sorted.map((i) => {
+        {currentItems.map((i) => {
           id++;
           let color: ColorsDefault;
           let text: string;
@@ -117,21 +134,40 @@ export default function Page() {
           return (
             <div key={i.id} className={`${s[`row`]} f-r body-5 bg-${bg} a-center pad-v-8 pad-h-8`}>
               <span className="w-100">{i.name}</span>
-              <span className={`w-n145 bg-${status} color-black text-center pad-all-4 rad-all-4 ${s[`status-column`]}`}>
+              <span className={`f-110 bg-${status} color-black text-center pad-all-4 rad-all-4 ${s[`status-column`]}`}>
                 {statusText}
               </span>
-              <A className="w-n110 text-center" color={color} href={href}>{text}</A>
+              <A className="f-80 f-r a-center j-center" color={color} href={href}>{text}</A>
             </div>
           );
         })}
         <div className={`${s[`row`]} f-r body-5 bg-white color-black a-center pad-v-8 pad-h-8 rad-bottom-16`}>
               <span className="w-100">Записи стримов</span>
-              <span className={`w-n145 bg-accent color-black text-center pad-all-4 rad-all-4 ${s[`status-column`]}`}>
+              <span className={`f-110 bg-accent color-black f-r a-center j-center pad-all-4 rad-all-4 ${s[`status-column`]}`}>
                 Стримы
               </span>
-              <A className="w-n110 text-center" color='black' href='https://www.youtube.com/playlist?list=PLgPYefSLHqt-8RueFtkjDIXCgXp37XHBe'>Клик</A>
+              <A className="f-80 f-r a-center j-center" color='black' href='https://www.youtube.com/playlist?list=PLgPYefSLHqt-8RueFtkjDIXCgXp37XHBe'>Клик</A>
             </div>
       </div>
+      <div className="f-r j-center gap-8 a-center body-5">
+          <Button
+            color="white"
+            disabled={currentPage === 1}
+            onClick={() => changePage(currentPage - 1)}
+          >
+            ←
+          </Button>
+          <span>
+            {currentPage}/{totalPages}
+          </span>
+          <Button
+            color="white"
+            disabled={currentPage === totalPages}
+            onClick={() => changePage(currentPage + 1)}
+          >
+            →
+          </Button>
+        </div>
     </div>
   );
 }

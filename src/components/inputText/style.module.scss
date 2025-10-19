@@ -48,6 +48,7 @@
   &:focus-within { @extend .color-#{$c4}; }
   &.valid {
     span { @extend .color-#{$c1}; }
+    input { @extend .color-#{$c3}; }
     &:hover { span { @extend .color-#{$c2}; } }
   }
 }
@@ -70,6 +71,7 @@ $colorsDefault: (
   }
   &.valid {
     span { @extend .color-#{$c1}; }
+    input { @extend .color-#{$c1}; }
     &:hover { span { @extend .color-#{$c2}; } }
   }
 }

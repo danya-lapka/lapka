@@ -1,0 +1,11 @@
+@use '@/styles/variables' as *;
+@use '@/styles/globals' as *;
+
+.controls {
+  label {
+    flex: 1 1 300px;
+    min-width: 200px;
+    height: auto;
+    align-self: center;
+  }
+}
