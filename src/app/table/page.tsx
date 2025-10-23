@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { ContentTable } from "@/data/content";
 import { A, Button, InputText } from "@/components";
 import { ColorsDefault } from "@/components/link";
@@ -10,7 +10,7 @@ import s from './style.module.scss';
 type SortKey = "name" | "status";
 type SortOrder = "asc" | "desc";
 
-export default function Page() {
+function TableContent() {
   const searchParams = useSearchParams();
   const name = searchParams.get("name");
 
@@ -79,16 +79,21 @@ export default function Page() {
   };
 
   if (loading) {
-    return (
-      <div className="skeleton-table"></div>
-    );
+    return <div className="skeleton-table"></div>;
   }
 
   let id: number = 1;
   return (
     <div className="f-c gap-20">
       <div className={`${s[`controls`]} f-rw a-center body-5 gap-16`}>
-        <InputText search onChange={(e) => {setSearchQuery(e.target.value)}} className="w-80" color="white">Поиск</InputText>
+        <InputText 
+          search 
+          onChange={(e) => {setSearchQuery(e.target.value)}} 
+          className="w-80" 
+          color="white"
+        >
+          Поиск
+        </InputText>
         <div className={`${s[`sorting`]} f-r body-5 gap-8`}>
           <Button className="j-between w-n125" onClick={() => {toggleSort("name")}} color="white">
             Название {sortKey === "name" && (sortOrder === "asc" ? <FaArrowUp /> : <FaArrowDown />)}
@@ -142,32 +147,40 @@ export default function Page() {
           );
         })}
         <div className={`${s[`row`]} f-r body-5 bg-white color-black a-center pad-v-8 pad-h-8 rad-bottom-16`}>
-              <span className="w-100">Записи стримов</span>
-              <span className={`f-110 bg-accent color-black f-r a-center j-center pad-all-4 rad-all-4 ${s[`status-column`]}`}>
-                Стримы
-              </span>
-              <A className="f-80 f-r a-center j-center" color='black' href='https://www.youtube.com/playlist?list=PLgPYefSLHqt-8RueFtkjDIXCgXp37XHBe'>Клик</A>
-            </div>
+          <span className="w-100">Записи стримов</span>
+          <span className={`f-110 bg-accent color-black f-r a-center j-center pad-all-4 rad-all-4 ${s[`status-column`]}`}>
+            Стримы
+          </span>
+          <A className="f-80 f-r a-center j-center" color='black' href='https://www.youtube.com/playlist?list=PLgPYefSLHqt-8RueFtkjDIXCgXp37XHBe'>Клик</A>
+        </div>
       </div>
       <div className="f-r j-center gap-8 a-center body-5">
-          <Button
-            color="white"
-            disabled={currentPage === 1}
-            onClick={() => changePage(currentPage - 1)}
-          >
-            ←
-          </Button>
-          <span>
-            {currentPage}/{totalPages}
-          </span>
-          <Button
-            color="white"
-            disabled={currentPage === totalPages}
-            onClick={() => changePage(currentPage + 1)}
-          >
-            →
-          </Button>
-        </div>
+        <Button
+          color="white"
+          disabled={currentPage === 1}
+          onClick={() => changePage(currentPage - 1)}
+        >
+          ←
+        </Button>
+        <span>
+          {currentPage}/{totalPages}
+        </span>
+        <Button
+          color="white"
+          disabled={currentPage === totalPages}
+          onClick={() => changePage(currentPage + 1)}
+        >
+          →
+        </Button>
+      </div>
     </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div className="skeleton-table"></div>}>
+      <TableContent />
+    </Suspense>
   );
 }
