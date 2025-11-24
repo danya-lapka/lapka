@@ -1,5 +1,3 @@
-// src/css-engine.ts
-
 // === 0. ТИПЫ (Внутренние, чтобы не зависеть от внешних файлов) ===
 export type CssDeclaration = Record<string, string>;
 export interface CssRule {
