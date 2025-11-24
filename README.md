@@ -1,50 +1,18 @@
 # danya-lapka
 
-Монорепозиторий с атомарным CSS-движком для Vite.
+A monorepo containing an atomic CSS engine for Vite.
 
-На данный момент содержит один публичный пакет:
+Currently includes one public package:
 
-→ **[@danya-lapka/css-vite](packages/css-vite)** – лёгкий runtime-генератор атомарных классов с поддержкой тем, адаптивности, псевдо-состояний и masonry.
+→ **[@danya-lapka/css-vite](packages/css-vite)** – a lightweight runtime atomic class generator with support for theming, responsiveness, pseudo-states, and masonry layouts.
 
-- [danya-lapka](#danya-lapka)
-  - [Быстрый старт (разработка)](#быстрый-старт-разработка)
-  - [Сборка и публикация пакета](#сборка-и-публикация-пакета)
-  - [Используемые инструменты](#используемые-инструменты)
-  - [Лицензия](#лицензия)
+## Tools Used
 
+- **Monorepo**: npm workspaces + Turborepo  
+- **Package bundling**: tsup (ESM + CJS + types)  
+- **Typing**: TypeScript 5 (strict mode)  
+- **Package manager**: npm 11+
 
-## Быстрый старт (разработка)
+## License
 
-```bash
-# Клонируем
-git clone https://github.com/твой-ник/danya-lapka.git
-cd danya-lapka
-
-# Устанавливаем (npm 11+)
-npm install
-
-# Запускаем тестовый проект (если есть) или просто проверяем сборку
-npm run build
-```
-
-## Сборка и публикация пакета
-
-```bash
-# Сборка + публикация в npm (публичный пакет)
-npm run publish:css
-```
-
-Скрипт делает:
-1. `turbo check-types build` — проверяет типы и собирает все пакеты
-2. Переходит в `packages/css-vite` и публикует через `npm publish --access public`
-
-## Используемые инструменты
-
-- **Монорепо**: npm workspaces + Turborepo
-- **Сборка пакета**: tsup (ESM + CJS + типы)
-- **Типизация**: TypeScript 5 (strict)
-- **Пакетный менеджер**: npm 11+
-
-## Лицензия
-
-[MIT](LICENSE) © Danya Lapka
+MIT © Danya Lapka
