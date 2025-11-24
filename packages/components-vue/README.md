@@ -72,11 +72,6 @@ import { Button } from '@danya-lapka/components-vue'
 </template>
 ```
 
-**Manual CSS** (other bundlers):
-```js
-import '@danya-lapka/components-vue/dist/lapka.css'
-```
-
 ### Local Preview
 
 ```bash
