@@ -1,29 +1,57 @@
-import { DynamicRule, StaticRule, Options, CssRule, CssDeclaration } from '../types';
+// src/css-engine.ts
+
+// === 0. ТИПЫ (Внутренние, чтобы не зависеть от внешних файлов) ===
+export type CssDeclaration = Record<string, string>;
+export interface CssRule {
+  selector: string;
+  declarations: CssDeclaration;
+  media?: string;
+  isRawSelector?: boolean; // Для сложных правил типа Masonry
+}
+export interface Options { scale?: number; unit?: string; }
+interface StaticRule { type: 'static'; selector: string; declarations: CssDeclaration; }
+interface DynamicRule { type: 'dynamic'; prefix: string; match: RegExp; generate: (ctx: { className: string; match: RegExpMatchArray }) => CssRule | CssRule[] | null; }
 
 // === 1. КОНФИГУРАЦИЯ ТЕМЫ ===
-const THEME_COLORS = {
-  'white': '#F2F2F2',
-  'gray1': '#BFBFBF',
-  'gray2': '#797979',
-  'gray3': '#333333',
+export const THEME_COLORS: Record<string, string> = {
+  'white': '#F2F2F2', 
+  'gray1': '#BFBFBF', 'gray2': '#797979', 'gray3': '#333333', 
   'black': '#000000',
-  'accent': '#FF40BF',
-  'accent1': '#FFBFE9',
-  'accent2': '#FF99DD',
-  'accent3': '#800054',
-  'success': '#40FF40',
-  'success-alt': '#62B262',
-  'warn': '#FFFF40',
-  'warn-alt': '#B2B262',
-  'error': '#FF4040',
-  'error-alt': '#B26262',
-  'info': '#4080FF',
-  'info-alt': '#627DB2'
+  'accent': '#FF40BF', 
+  'accent1': '#FFBFE9', 'accent2': '#FF99DD', 'accent3': '#800054',
+  'success': '#40FF40', 'success-alt': '#62B262', 
+  'warn': '#FFFF40', 'warn-alt': '#B2B262',
+  'error': '#FF4040', 'error-alt': '#B26262', 
+  'info': '#4080FF', 'info-alt': '#627DB2'
 };
 
 const THEME_FONTS = {
   'heading': '"Unbounded", sans-serif',
   'body': '"Monocraft", monospace'
+};
+
+// Брейкпоинты для адаптивности (md:class)
+const BREAKPOINTS: Record<string, string> = {
+  'xs': '576px', 
+  'sm': '768px', 
+  'md': '1024px', 
+  'lg': '1440px', 
+  'xl': '1920px'
+};
+
+// Псевдо-классы (hover:class)
+const PSEUDO_VARIANTS: Record<string, string> = {
+  'hover': ':hover', 
+  'focus': ':focus', 
+  'active': ':active', 
+  'visited': ':visited',
+  'disabled': ':disabled', 
+  'first': ':first-child', 
+  'last': ':last-child',
+  'odd': ':nth-child(odd)', 
+  'even': ':nth-child(even)',
+  'before': '::before', 
+  'after': '::after',
 };
 
 const rootVars = [
@@ -37,26 +65,40 @@ ${rootVars}
 font-size: 16px;
 }
 * {
-  box-sizing: border-box;
-  margin: 0; padding: 0;
-  margin-block: 0;
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0;
+  margin-block: 0; 
   margin-inline: 0;
   border: none; 
   outline: none;
   transition: all .333s cubic-bezier(0.22, 0.61, 0.36, 1);
-  position: relative;
-  text-decoration: none;
+  position: relative; 
+  text-decoration: none; 
   list-style: none;
 }
 html, body { width: 100%; min-height: 100vh; }
-svg { height: 1em; width: auto; color: currentColor; fill: currentColor; }
+svg { 
+  height: 1em; 
+  width: auto; 
+  color: currentColor; 
+  fill: currentColor; 
+}
 svg path { fill: currentColor }
 p + p { margin-top: 1cap }
 `;
 
 // === 2. РЕЕСТР ПРАВИЛ ===
-export const staticRules = new Map<string, StaticRule>();
-export const dynamicRules = new Map<string, DynamicRule[]>();
+const staticRules = new Map<string, StaticRule>();
+const dynamicRules = new Map<string, DynamicRule[]>();
+
+const escapeCache = new Map<string, string>();
+export function escapeClassName(name: string): string {
+  if (escapeCache.has(name)) return escapeCache.get(name)!;
+  const result = name.replace(/([ !"#$%&'()*+,./:;<=>?@[\\\]^`{|}~])/g, '\\$1');
+  escapeCache.set(name, result);
+  return result;
+}
 
 function addStatic(className: string, declarations: CssDeclaration) {
   staticRules.set(className, {
@@ -71,14 +113,7 @@ function addDynamic(prefix: string, match: RegExp, generate: (ctx: any) => CssRu
   dynamicRules.get(prefix)!.push({ type: 'dynamic', prefix, match, generate });
 }
 
-// === 3. УТИЛИТЫ ===
-const escapeCache = new Map<string, string>();
-export function escapeClassName(name: string): string {
-  if (escapeCache.has(name)) return escapeCache.get(name)!;
-  const result = name.replace(/([ !"#$%&'()*+,./:;<=>?@[\\\]^`{|}~])/g, '\\$1');
-  escapeCache.set(name, result);
-  return result;
-}
+// === 3. УТИЛИТЫ И ГЕНЕРАТОРЫ ===
 
 function calculateValue(n: number, scale: number, unit: string): string {
   const valueNum = n * scale;
@@ -89,7 +124,6 @@ function normalizeBracketValue(v: string): string {
   return v.replace(/_/g, ' ');
 }
 
-// === 4. ГЕНЕРАТОРЫ ===
 export const REM: Required<Options> = { scale: 0.0625, unit: 'rem' };
 
 function createNumeric(prefix: string, property: string, opts?: Options) {
@@ -111,7 +145,9 @@ function createBracket(prefix: string, property: string, mapValue?: (v: string) 
 
 function createStringMap(prefix: string, property: string, map: Record<string, string>) {
   Object.entries(map).forEach(([suffix, value]) => {
-    addStatic(`${prefix}-${suffix}`, { [property]: value });
+    // Исправление: если prefix пустой, не добавляем дефис
+    const key = prefix ? `${prefix}-${suffix}` : suffix;
+    addStatic(key, { [property]: value });
   });
 }
 
@@ -146,7 +182,7 @@ function createSideRules(prefix: string, property: string, opts?: Options) {
   createAxis('y', ['top', 'bottom']);
 }
 
-// === 5. ВСЕ ПРАВИЛА ===
+// === 4. ОПРЕДЕЛЕНИЕ ПРАВИЛ ===
 
 // --- Layout & Spacing ---
 createSideRules('p', 'padding', REM);
@@ -190,16 +226,40 @@ addStatic('f-wrap-rev', { 'flex-wrap': 'wrap-reverse' });
 createBracket('flex', 'flex');
 
 // --- Align / Justify ---
-const alignMap = { start: 'flex-start', end: 'flex-end', center: 'center', stretch: 'stretch', baseline: 'baseline' };
-const justifyMap = { start: 'flex-start', end: 'flex-end', center: 'center', between: 'space-between', around: 'space-around', evenly: 'space-evenly' };
+const alignMap = { 
+  start: 'flex-start', 
+  end: 'flex-end', 
+  center: 'center', 
+  stretch: 'stretch', 
+  baseline: 'baseline' 
+};
+const justifyMap = { 
+  start: 'flex-start', 
+  end: 'flex-end', 
+  center: 'center', 
+  between: 'space-between', 
+  around: 'space-around', 
+  evenly: 'space-evenly' 
+};
 
 createStringMap('ai', 'align-items', alignMap);
-createStringMap('ac', 'align-content', { ...alignMap, ...justifyMap }); // ac supports space-between etc
+createStringMap('ac', 'align-content', { ...alignMap, ...justifyMap });
 createStringMap('as', 'align-self', { ...alignMap, auto: 'auto' });
 
 createStringMap('jc', 'justify-content', justifyMap);
-createStringMap('ji', 'justify-items', { start: 'start', end: 'end', center: 'center', stretch: 'stretch' });
-createStringMap('js', 'justify-self', { start: 'start', end: 'end', center: 'center', stretch: 'stretch', auto: 'auto' });
+createStringMap('ji', 'justify-items', { 
+  start: 'start', 
+  end: 'end', 
+  center: 'center', 
+  stretch: 'stretch' 
+});
+createStringMap('js', 'justify-self', { 
+  start: 'start', 
+  end: 'end', 
+  center: 'center', 
+  stretch: 'stretch', 
+  auto: 'auto' 
+});
 
 // --- Order ---
 for (let i = 1; i <= 12; i++) addStatic(`order-${i}`, { order: String(i) });
@@ -241,16 +301,41 @@ createBracket('outline', 'outline-color', v => ({ 'outline-color': colorTransfor
 createBracket('fill', 'fill', v => ({ 'fill': colorTransform(v).val }));
 
 // --- Typography ---
-createStringMap('text', 'text-align', { center: 'center', left: 'left', right: 'right', justify: 'justify' });
-createStringMap('', 'text-transform', { uppercase: 'uppercase', lowercase: 'lowercase', capitalize: 'capitalize' });
-createStringMap('', 'text-decoration', { underline: 'underline', 'line-through': 'line-through', 'none': 'none' });
+createStringMap('text', 'text-align', { 
+  center: 'center', 
+  left: 'left', 
+  right: 'right', 
+  justify: 'justify' 
+});
+createStringMap('', 'text-transform', { 
+  uppercase: 'uppercase', 
+  lowercase: 'lowercase', 
+  capitalize: 'capitalize' 
+});
+createStringMap('', 'text-decoration', { 
+  underline: 'underline', 
+  'line-through': 'line-through', 
+  'none': 'none' 
+});
 addStatic('italic', { 'font-style': 'italic' });
 addStatic('normal', { 'font-style': 'normal' });
-addStatic('truncate', { overflow: 'hidden', 'text-overflow': 'ellipsis', 'white-space': 'nowrap' });
+addStatic('truncate', { 
+  overflow: 'hidden', 
+  'text-overflow': 'ellipsis', 
+  'white-space': 'nowrap' 
+});
 
 [
-  ['heading-1', 64, 800], ['heading-2', 48, 700], ['heading-3', 40, 700], ['heading-4', 36, 600],
-  ['body-1', 36, 700], ['body-2', 32, 600], ['body-3', 24, 600], ['body-4', 20, 500], ['body-5', 16, 500], ['body-6', 12, 500]
+  ['heading-1', 64, 800], 
+  ['heading-2', 48, 700], 
+  ['heading-3', 40, 700], 
+  ['heading-4', 36, 600],
+  ['body-1', 36, 700], 
+  ['body-2', 32, 600], 
+  ['body-3', 24, 600], 
+  ['body-4', 20, 500], 
+  ['body-5', 16, 500], 
+  ['body-6', 12, 500]
 ].forEach(([name, size, weight]) => {
   const isBody = String(name).startsWith('body');
   addStatic(name as string, {
@@ -270,10 +355,25 @@ addStatic('truncate', { overflow: 'hidden', 'text-overflow': 'ellipsis', 'white-
 createNumeric('r', 'border-radius', REM);
 createBracket('r', 'border-radius');
 createNumeric('border-w', 'border-width', REM);
-createStringMap('border', 'border-style', { solid: 'solid', dashed: 'dashed', dotted: 'dotted', double: 'double', groove: 'groove', ridge: 'ridge', none: 'none' });
+createStringMap('border', 'border-style', { 
+  solid: 'solid', 
+  dashed: 'dashed', 
+  dotted: 'dotted', 
+  double: 'double', 
+  groove: 'groove', 
+  ridge: 'ridge', 
+  none: 'none' 
+});
 createNumeric('outline-w', 'outline-width', REM);
-createStringMap('outline', 'outline-style', { solid: 'solid', dashed: 'dashed', dotted: 'dotted', double: 'double', groove: 'groove', ridge: 'ridge', none: 'none' });
-
+createStringMap('outline', 'outline-style', { 
+  solid: 'solid', 
+  dashed: 'dashed', 
+  dotted: 'dotted', 
+  double: 'double', 
+  groove: 'groove', 
+  ridge: 'ridge', 
+  none: 'none' 
+});
 
 // --- Effects ---
 createNumeric('z', 'z-index', { scale: 1, unit: '' });
@@ -281,10 +381,21 @@ addDynamic('opacity', /^opacity-(\d+)$/, ({ className, match }) => ({
   selector: `.${escapeClassName(className)}`,
   declarations: { opacity: (Number(match![1]) / 100).toString() }
 }));
-createStringMap('overflow', 'overflow', { auto: 'auto', hidden: 'hidden', visible: 'visible', scroll: 'scroll' });
-createStringMap('c', 'cursor', { pointer: 'pointer', default: 'default', text: 'text', move: 'move', 'not-allowed': 'not-allowed' });
+createStringMap('overflow', 'overflow', { 
+  auto: 'auto', 
+  hidden: 'hidden', 
+  visible: 'visible', 
+  scroll: 'scroll' 
+});
+createStringMap('c', 'cursor', { 
+  pointer: 'pointer', 
+  default: 'default', 
+  text: 'text', 
+  move: 'move', 
+  'not-allowed': 'not-allowed' 
+});
 
-// --- Transforms (Simplified) ---
+// --- Transforms ---
 addDynamic('rotate', /^rotate-(\d+)$/, ({ className, match }) => ({
   selector: `.${escapeClassName(className)}`,
   declarations: { transform: `rotate(${match![1]}deg)` }
@@ -294,27 +405,35 @@ addDynamic('scale', /^scale-(\d+)$/, ({ className, match }) => ({
   declarations: { transform: `scale(${Number(match![1]) / 100})` }
 }));
 
-// --- Display & Layout ---
-createStringMap('dis', 'display', { block: 'block', inline: 'inline', 'inline-block': 'inline-block', none: 'none', flex: 'flex', 'inline-flex': 'inline-flex', grid: 'grid', 'inline-grid': 'inline-grid' });
+// --- Display ---
+createStringMap('dis', 'display', { 
+  block: 'block', 
+  inline: 'inline', 
+  'inline-block': 'inline-block', 
+  none: 'none', 
+  flex: 'flex', 
+  'inline-flex': 'inline-flex', 
+  grid: 'grid', 
+  'inline-grid': 'inline-grid' 
+});
 
-// --- Masonry ---
+// --- Masonry (Complex) ---
 addDynamic('gm', /^gm-(\d+)-(\d+)$/, ({ className, match }) => {
   const cols = String(parseInt(match![1]));
   const gapIdx = parseInt(match![2]);
   const gapValue = calculateValue(gapIdx, REM.scale, REM.unit);
-
   const baseSelector = `.${escapeClassName(className)}`;
 
   return [
     {
       selector: baseSelector,
       declarations: {
-        display: 'block',
+        'display': 'block',
         'column-count': cols,
         'column-gap': gapValue,
         'align-items': 'start'
-      } as CssDeclaration,
-      isRawSelector: true // Указываем, что это уже полный селектор
+      } as CssDeclaration, 
+      isRawSelector: true
     },
     {
       selector: `${baseSelector} > *`,
@@ -322,12 +441,104 @@ addDynamic('gm', /^gm-(\d+)-(\d+)$/, ({ className, match }) => {
         'break-inside': 'avoid',
         'margin-bottom': gapValue,
         'width': '100%'
-      } as CssDeclaration,
-      isRawSelector: true // Указываем, что это уже полный селектор
+      } as CssDeclaration, 
+      isRawSelector: true
     }
   ];
 });
 
 addStatic('masonry', {'grid-template-rows': 'masonry'});
-
 createBracket('content', 'content');
+
+
+// === 5. ФУНКЦИЯ ГЕНЕРАЦИИ (Основная логика) ===
+
+export function generateCss(classes: Set<string>): string {
+  const rules: CssRule[] = [];
+
+  classes.forEach(fullClassName => {
+    let base = fullClassName;
+    let media = '';
+    let pseudo = '';
+
+    // Парсинг md:hover:bg-red
+    const parts = fullClassName.split(':');
+    if (parts.length > 1) {
+      base = parts.pop()!;
+      for (const p of parts) {
+        if (BREAKPOINTS[p]) {
+          media = `@media (min-width: ${BREAKPOINTS[p]})`;
+        } else if (PSEUDO_VARIANTS[p]) {
+          pseudo += PSEUDO_VARIANTS[p];
+        } else {
+          return; // Неизвестный префикс
+        }
+      }
+    }
+
+    // Вспомогательная функция для создания правила с учетом media/pseudo
+    const wrapRule = (rule: CssRule): CssRule => {
+      // Если это raw selector (Masonry), мы не добавляем псевдо-классы к селектору,
+      // но media query всё равно должно работать
+      if (rule.isRawSelector) {
+        return { ...rule, media: media || undefined };
+      }
+      
+      // Обычный случай
+      return {
+        selector: `.${escapeClassName(fullClassName)}${pseudo}`,
+        declarations: rule.declarations,
+        media: media || undefined
+      };
+    };
+
+    // 1. Поиск в Static
+    if (staticRules.has(base)) {
+      rules.push(wrapRule(staticRules.get(base)!));
+      return;
+    }
+
+    // 2. Поиск в Dynamic
+    const dashIndex = base.indexOf('-');
+    if (dashIndex !== -1) {
+      const prefix = base.substring(0, dashIndex);
+      const group = dynamicRules.get(prefix);
+      if (group) {
+        for (const { match, generate } of group) {
+          const m = base.match(match);
+          if (m) {
+            const res = generate({ className: base, match: m });
+            if (res) {
+              if (Array.isArray(res)) {
+                // Если генератор вернул массив (Masonry), обрабатываем каждый
+                res.forEach(r => rules.push(wrapRule(r)));
+              } else {
+                rules.push(wrapRule(res));
+              }
+            }
+            break;
+          }
+        }
+      }
+    }
+  });
+
+  // Сортировка правил (media queries вниз)
+  const noMedia = rules.filter(r => !r.media);
+  const withMedia = rules.filter(r => r.media).sort((a, b) => {
+    const getPx = (s: string) => parseInt(s.match(/\d+/)![0]);
+    return getPx(a.media!) - getPx(b.media!);
+  });
+
+  // Рендеринг в строку
+  const ruleToString = (r: CssRule) => {
+    const decls = Object.entries(r.declarations)
+      .map(([k, v]) => `${k}:${v}`)
+      .join(';');
+    const block = `${r.selector}{${decls}}`;
+    return r.media ? `${r.media}{${block}}` : block;
+  };
+
+  return BASE_STYLES + '\n' + 
+         [...noMedia, ...withMedia].map(ruleToString).join('\n');
+}
