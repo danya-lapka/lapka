@@ -1,0 +1,25 @@
+{
+  "name": "@danya-lapka/css",
+  "version": "1.0.6",
+  "private": false,
+  "description": "Atomic CSS Generator",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "@danya-lapka/css": "dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "css": "node dist/cli.js --watch",
+    "build:css": "node dist/cli.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0",
+    "@types/node": "^20.10.0"
+  }
+}
