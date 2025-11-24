@@ -3,6 +3,7 @@
   <button
     :type="type"
     :class="`${classes} ${props.class}`"
+    class="px-12"
     @click="$emit('click', $event)"
     @mouseenter="$emit('mouseenter', $event)"
     @mouseleave="$emit('mouseleave', $event)"
@@ -44,7 +45,7 @@ const getSizeClasses = (size: typeof props.size) => sizeClasses[size];
 
 const classes = computed(() => {
   return [
-    'flex f-row f-nowrap ai-center jc-center',
+    'dis-flex f-row f-nowrap ai-center jc-center c-pointer',
     getSizeClasses(props.size),
     getColorClasses(props.bg, 'bg'),
     getColorClasses(props.color, 'color')
@@ -61,5 +62,5 @@ const emit = defineEmits<{
 }>();
 
 </script>
-<style scoped>
+<style>
 </style>

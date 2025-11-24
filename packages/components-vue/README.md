@@ -8,8 +8,9 @@
   - [✨ Features](#-features)
   - [🚀 Quick Start](#-quick-start)
     - [1. Installation](#1-installation)
-    - [2. Generate \& Import CSS](#2-generate--import-css)
+    - [2. Generate CSS (User-side)](#2-generate-css-user-side)
     - [3. Use Components](#3-use-components)
+    - [Local Preview](#local-preview)
   - [📦 Components](#-components)
     - [Button](#button)
       - [🔧 Props](#-props)
@@ -43,39 +44,44 @@ npm install @danya-lapka/components-vue @danya-lapka/css vue@^3.4.0
 
 **Note**: `@danya-lapka/css` is a peer dependency for styles.
 
-### 2. Generate & Import CSS
-
-Run Lapka CSS CLI to generate styles:
+### 2. Generate CSS (User-side)
 
 ```bash
-npx @danya-lapka/css -i ./src -o ./src/assets/lapka.css --watch
+npm i @danya-lapka/css -D
+npx @danya-lapka/css -i ./src,node_modules/@danya-lapka/components-vue/src -o ./src/lapka.css --watch
 ```
 
-Import in your `main.ts` or component:
-
-```vue
-<style>
-@import './assets/lapka.css';
-</style>
+Import:
+```js
+import './lapka.css'
 ```
 
 ### 3. Use Components
 
+**With auto-CSS** (Vite detects "style" field):
+
 ```vue
 <script setup>
-import { Button } from '@danya-lapka/components-vue';
+import { Button } from '@danya-lapka/components-vue'
 </script>
 
 <template>
-  <Button
-    size="lg"
-    bg="white-accent"
-    color="black-accent3"
-    @click="handleClick"
-  >
+  <Button size="lg" bg="accent-white" color="white-accent3">
     Get Started
   </Button>
 </template>
+```
+
+**Manual CSS** (other bundlers):
+```js
+import '@danya-lapka/components-vue/dist/lapka.css'
+```
+
+### Local Preview
+
+```bash
+npm run build
+npm run preview  # Serves http://localhost:4173 — test Button styles
 ```
 
 ---

@@ -126,7 +126,7 @@ function createSideRules(prefix: string, property: string, opts?: Options) {
     createBracket(pSide, propSide);
   });
   const createAxis = (axisSuffix: string, sides: string[]) => {
-    const pAxis = `${prefix}-${axisSuffix}`;
+    const pAxis = `${prefix}${axisSuffix}`;
     const scale = opts?.scale ?? 1;
     const unit = opts?.unit ?? '';
     addDynamic(pAxis, new RegExp(`^${pAxis}-(\\d+)$`), ({ className, match }) => {

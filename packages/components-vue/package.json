@@ -12,8 +12,7 @@
     "vue": "^3.4.0"
   },
   "scripts": {
-    "build:css": "node ../../packages/css/dist/cli.js -i ./src -o ./dist/lapka.css",
-    "build": "rimraf dist && npm run build:css && vite build",
+    "build": "rimraf dist && vite build",
     "dev": "vite build --watch",
     "preview": "vite preview"
   },

@@ -8,9 +8,14 @@ const IGNORED_DIRS = new Set([
   '.turbo', 'coverage', 'scripts', 'generated', 'public'
 ]);
 
-// Ищет class="..." и простые строки, похожие на utility-классы
-const CLASS_REGEX = /(?:class(?:Name)?|:?class)\s*[:=]\s*["'`]([^"'`]+)["'`]|(["'`])([^"'`\s<>{}]+\-[^"'`\s<>{}]*)\2/g;
+const CLASS_REGEX = /(?:class(?:Name)?|:?class)\s*[:=]\s*["'`]([^"'`]+)["'`]/g;
 const SPLIT_REGEX = /\s+/;
+
+const STRING_LITERAL_REGEX = /"((?:[^"\\]|\\.)*)"| '((?:[^'\\]|\\.)*)' | `((?:[^`\\]|\\.)*)` /g;
+
+const COLOR_PAIR_REGEX = /^([a-z][a-z0-9-]+)-([a-z][a-z0-9-]+)$/i;
+
+const COLOR_ATTR_REGEX = /\b(bg|color)\s*=\s*["']([^"']+)["']/gi;
 
 async function walk(dir: string): Promise<string[]> {
   const files: string[] = [];
@@ -39,14 +44,60 @@ export async function extractClassesFromFiles(root: string): Promise<string[]> {
     try {
       const content = await fs.readFile(file, 'utf8');
       let match;
+
+      // class= attributes
       while ((match = CLASS_REGEX.exec(content)) !== null) {
-        const raw = match[1] || match[3];
+        const raw = match[1];
         if (raw) {
           const parts = raw.split(SPLIT_REGEX);
           for (const part of parts) {
             const trimmed = part.trim();
             if (trimmed.length > 1 && !trimmed.includes('<')) {
               classes.add(trimmed);
+            }
+          }
+        }
+      }
+
+      // Color attributes in template (bg="white-black")
+      let attrMatch;
+      COLOR_ATTR_REGEX.lastIndex = 0;
+      while ((attrMatch = COLOR_ATTR_REGEX.exec(content)) !== null) {
+        const prefix = attrMatch[1];
+        const value = attrMatch[2];
+        const idx = value.lastIndexOf('-');
+        if (idx > 0) {
+          const def = value.slice(0, idx);
+          const hover = value.slice(idx + 1);
+          classes.add(`${prefix}-${def}`);
+          classes.add(`hover:${prefix}-${hover}`);
+        }
+      }
+
+      // String literals
+      let strMatch;
+      STRING_LITERAL_REGEX.lastIndex = 0;
+      while ((strMatch = STRING_LITERAL_REGEX.exec(content)) !== null) {
+        let inner = strMatch[1] || strMatch[2] || strMatch[3] || '';
+        inner = inner.replace(/\\(.)/g, '$1');
+
+        const parts = inner.split(SPLIT_REGEX);
+        for (const part of parts) {
+          const trimmed = part.trim();
+          if (trimmed.length > 1 && 
+              !trimmed.includes('<') && 
+              !trimmed.includes('{') && 
+              !trimmed.includes('}') && 
+              /^[a-z][a-z0-9:-]*$/i.test(trimmed)) {
+            classes.add(trimmed);
+
+            // Color pairs in literals ('white-gray1')
+            if (COLOR_PAIR_REGEX.test(trimmed)) {
+              const [, def, hover] = trimmed.match(COLOR_PAIR_REGEX)!;
+              ['bg', 'color'].forEach(prefix => {
+                classes.add(`${prefix}-${def}`);
+                classes.add(`hover:${prefix}-${hover}`);
+              });
             }
           }
         }
@@ -60,5 +111,5 @@ export async function extractClassesFromFiles(root: string): Promise<string[]> {
 }
 
 export function escapeClassName(name: string): string {
-  return name.replace(/([ !"#$%&'()*+,./:;<=>?@[\\\]^`{|}~])/g, '\\$1');
+  return name.replace(/([ !"#$%&'()*+,./:;<=>?@[\\^`{|}~])/g, '\\$1');
 }
