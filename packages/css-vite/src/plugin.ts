@@ -5,6 +5,7 @@ export default function lapkaCss(): Plugin {
   // ВАЖНО: Используем расширение .css, чтобы Vite обработал это как стили
   const virtualId = 'virtual:lapka.css';
   const resolvedId = '\0' + virtualId;
+  const cssFileName = 'lapka-styles.css';
 
   const knownClasses = new Set<string>();
   const themeColorKeys = new Set(Object.keys(THEME_COLORS));
@@ -52,7 +53,7 @@ export default function lapkaCss(): Plugin {
   };
 
   return {
-    name: 'vite-plugin-lapka-css',
+    name: '@danya-lapka/css-vite',
     
     // Получаем доступ к серверу Vite для ручной инвалидации
     configureServer(_server) {
@@ -66,6 +67,32 @@ export default function lapkaCss(): Plugin {
     load(id) {
       if (id === resolvedId) {
         return generateCss(knownClasses);
+      }
+    },
+
+    transformIndexHtml: {
+      handler(html, { path, server }) {
+        if (server) {
+          return html.replace(
+            '</head>',
+            `<style id="lapka-styles">${generateCss(knownClasses)}</style></head>`
+          );
+        }
+        return html.replace(
+          '</head>',
+          `<link rel="stylesheet" href="/${cssFileName}">\n</head>`
+        );
+      }
+    },
+
+     generateBundle(options, bundle) {
+      if (process.env.NODE_ENV === 'production') {
+        const cssContent = generateCss(knownClasses);
+        this.emitFile({
+          type: 'asset',
+          fileName: cssFileName,
+          source: cssContent
+        });
       }
     },
 

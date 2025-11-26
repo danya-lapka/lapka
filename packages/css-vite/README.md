@@ -35,7 +35,6 @@ npm i @danya-lapka/css-vite
 import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import lapkaCss from '@danya-lapka/css-vite'
-import { resolve } from 'path';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -49,12 +48,6 @@ export default defineConfig({
   build: {
     rollupOptions: {
       external: ['virtual:lapka.css']
-    }
-  },
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-      'virtual:lapka.css': resolve('node_modules', '@danya-lapka/css-vite', 'empty.css')
     }
   }
 })
