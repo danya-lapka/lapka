@@ -7,8 +7,21 @@ export interface CssRule {
   isRawSelector?: boolean; // Для сложных правил типа Masonry
 }
 export interface Options { scale?: number; unit?: string; }
-interface StaticRule { type: 'static'; selector: string; declarations: CssDeclaration; }
-interface DynamicRule { type: 'dynamic'; prefix: string; match: RegExp; generate: (ctx: { className: string; match: RegExpMatchArray }) => CssRule | CssRule[] | null; }
+interface StaticRule { 
+  type: 'static'; 
+  selector: string; 
+  declarations: CssDeclaration; 
+}
+interface DynamicRule { 
+  type: 'dynamic'; 
+  prefix: string; 
+  match: RegExp; 
+  generate: (ctx: { 
+    className: string; 
+    match: RegExpMatchArray;
+    finalSelector: string
+  }) => CssRule | CssRule[] | null; 
+}
 
 // === 1. КОНФИГУРАЦИЯ ТЕМЫ ===
 export const THEME_COLORS: Record<string, string> = {
@@ -23,13 +36,13 @@ export const THEME_COLORS: Record<string, string> = {
   'info': '#4080FF', 'info-alt': '#627DB2'
 };
 
-const THEME_FONTS = {
+export const THEME_FONTS = {
   'heading': '"Unbounded", sans-serif',
   'body': '"Monocraft", monospace'
 };
 
 // Брейкпоинты для адаптивности (md:class)
-const BREAKPOINTS: Record<string, string> = {
+export const BREAKPOINTS: Record<string, string> = {
   'xs': '576px', 
   'sm': '768px', 
   'md': '1024px', 
@@ -38,7 +51,7 @@ const BREAKPOINTS: Record<string, string> = {
 };
 
 // Псевдо-классы (hover:class)
-const PSEUDO_VARIANTS: Record<string, string> = {
+export const PSEUDO_VARIANTS: Record<string, string> = {
   'hover': ':hover', 
   'focus': ':focus', 
   'active': ':active', 
@@ -106,7 +119,7 @@ function addStatic(className: string, declarations: CssDeclaration) {
   });
 }
 
-function addDynamic(prefix: string, match: RegExp, generate: (ctx: any) => CssRule | CssRule[] | null) {
+function addDynamic(prefix: string, match: RegExp, generate: DynamicRule['generate']) {
   if (!dynamicRules.has(prefix)) dynamicRules.set(prefix, []);
   dynamicRules.get(prefix)!.push({ type: 'dynamic', prefix, match, generate });
 }
@@ -416,12 +429,11 @@ createStringMap('dis', 'display', {
 });
 
 // --- Masonry (Complex) ---
-addDynamic('gm', /^gm-(\d+)-(\d+)$/, ({ className, match }) => {
+addDynamic('gm', /^gm-(\d+)-(\d+)$/, ({ className, match, finalSelector }) => {
   const cols = String(parseInt(match![1]));
   const gapIdx = parseInt(match![2]);
   const gapValue = calculateValue(gapIdx, REM.scale, REM.unit);
-  const baseSelector = `.${escapeClassName(className)}`;
-
+  const baseSelector = finalSelector;
   return [
     {
       selector: baseSelector,
@@ -459,7 +471,6 @@ export function generateCss(classes: Set<string>): string {
     let media = '';
     let pseudo = '';
 
-    // Парсинг md:hover:bg-red
     const parts = fullClassName.split(':');
     if (parts.length > 1) {
       base = parts.pop()!;
@@ -468,35 +479,28 @@ export function generateCss(classes: Set<string>): string {
           media = `@media (min-width: ${BREAKPOINTS[p]})`;
         } else if (PSEUDO_VARIANTS[p]) {
           pseudo += PSEUDO_VARIANTS[p];
-        } else {
-          return; // Неизвестный префикс
         }
       }
     }
 
-    // Вспомогательная функция для создания правила с учетом media/pseudo
+    const finalSelector = `.${escapeClassName(fullClassName)}${pseudo}`;
+
     const wrapRule = (rule: CssRule): CssRule => {
-      // Если это raw selector (Masonry), мы не добавляем псевдо-классы к селектору,
-      // но media query всё равно должно работать
       if (rule.isRawSelector) {
         return { ...rule, media: media || undefined };
       }
-      
-      // Обычный случай
       return {
-        selector: `.${escapeClassName(fullClassName)}${pseudo}`,
+        selector: finalSelector,
         declarations: rule.declarations,
         media: media || undefined
       };
     };
 
-    // 1. Поиск в Static
     if (staticRules.has(base)) {
       rules.push(wrapRule(staticRules.get(base)!));
       return;
     }
 
-    // 2. Поиск в Dynamic
     const dashIndex = base.indexOf('-');
     if (dashIndex !== -1) {
       const prefix = base.substring(0, dashIndex);
@@ -505,10 +509,9 @@ export function generateCss(classes: Set<string>): string {
         for (const { match, generate } of group) {
           const m = base.match(match);
           if (m) {
-            const res = generate({ className: base, match: m });
+            const res = generate({ className: base, match: m, finalSelector });
             if (res) {
               if (Array.isArray(res)) {
-                // Если генератор вернул массив (Masonry), обрабатываем каждый
                 res.forEach(r => rules.push(wrapRule(r)));
               } else {
                 rules.push(wrapRule(res));
@@ -521,14 +524,12 @@ export function generateCss(classes: Set<string>): string {
     }
   });
 
-  // Сортировка правил (media queries вниз)
   const noMedia = rules.filter(r => !r.media);
   const withMedia = rules.filter(r => r.media).sort((a, b) => {
     const getPx = (s: string) => parseInt(s.match(/\d+/)![0]);
     return getPx(a.media!) - getPx(b.media!);
   });
 
-  // Рендеринг в строку
   const ruleToString = (r: CssRule) => {
     const decls = Object.entries(r.declarations)
       .map(([k, v]) => `${k}:${v}`)
