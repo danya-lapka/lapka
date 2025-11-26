@@ -4,4 +4,4 @@ import atomicCssPlugin from './plugin';
 export default atomicCssPlugin;
 
 // Также можно экспортировать функцию генерации, если она вдруг понадобится отдельно
-export { generateCss } from './engine';
+export { generateCss, THEME_COLORS, PSEUDO_VARIANTS, BREAKPOINTS } from './engine';
