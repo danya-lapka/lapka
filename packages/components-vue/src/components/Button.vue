@@ -8,13 +8,21 @@
   </button>
 </template>
 <script setup lang="ts">
-import { computed } from 'vue';
-import type { DefaultProps, ColorPair } from './types';
+import { computed, useAttrs } from 'vue';
+import type { ColorPair, Size } from './types';
+
+const attrs = useAttrs();
 
 /**
  * Button Props
  */
-interface Props extends DefaultProps {
+interface Props {
+  /**
+   * Button Size
+   * @default md
+   */
+  size?: Size,
+
   /**
    * HTML-type for button
    * @values "button", "submit", "reset"
@@ -41,10 +49,11 @@ interface Props extends DefaultProps {
   text?: ColorPair
 }
 const props = withDefaults(defineProps<Props>(),{
+  size: "md",
   type: "button",
   outline: false,
   bg: "white/gray1",
-  text: "black/gray3"
+  text: "black/gray3",
 });
 
 /**
@@ -62,15 +71,27 @@ const emits = defineEmits<Emits>();
 const getColors = (colors: ColorPair, prefix: "bg"|"color"): string => {
   const [baseColor, hoverColor] = colors.split("/");
   return `${prefix}-${baseColor} hover:${prefix}-${hoverColor}`;
-} 
+}
+const getSize = (size: Size): string => {
+  let result: string;
+  switch (size) {
+    case 'xl': result = `body-1 px-20 py-10 g-12 r-12`; break;
+    case 'lg': result = `body-2 px-16 py-8 g-10 r-10`; break;
+    case 'md': result = `body-3 px-12 py-6 g-8 r-8`; break;
+    case 'sm': result = `body-4 px-8 py-4 g-6 r-6`; break;
+    case 'xs': result = `body-5 px-4 py-2 g-4 r-4`; break;
+  }
+  return result;
+}
 
 const classes = computed(() => {
   return (
   [
-    props.class,
+    attrs.class,
+    "dis-flex f-row f-nowrap c-pointer",
     getColors(props.bg, "bg"),
     getColors(props.text, "color"),
-    "dis-flex f-row f-nowrap c-pointer"
+    getSize(props.size)
   ].join(" ")
   );
 })
