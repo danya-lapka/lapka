@@ -98,7 +98,7 @@ export default function lapkaCss(): Plugin {
 
     transform(code, id) {
       // Игнорируем node_modules и сам CSS файл
-      if (/\.(vue|ts|tsx|js|jsx)$/.test(id) && !id.includes('node_modules')) {
+      if (/\.(vue|ts|tsx|js|jsx|svelte|astro|mdx)$/.test(id)) {
         const hasNewClasses = scanCode(code);
         
         // КЛЮЧЕВОЙ МОМЕНТ:

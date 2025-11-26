@@ -23,7 +23,7 @@
     "vue": "^3.5.25"
   },
   "dependencies": {
-    "@danya-lapka/css-vite": "^1.0.7"
+    "@danya-lapka/css-vite": "^1.0.8"
   },
   "devDependencies": {
     "@vue/compiler-sfc": "^3.5.25",
