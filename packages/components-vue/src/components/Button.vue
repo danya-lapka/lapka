@@ -4,7 +4,15 @@
   :type="type"
   @click="$emit('click', $event)"
   >
-  <slot>Button</slot>
+  <!--
+    @slot Button main content
+    @slotname default
+    @example
+    ```vue
+    <Button>Your text</Button>
+    ```
+  -->
+    <slot>Button</slot>
   </button>
 </template>
 <script setup lang="ts">
@@ -12,14 +20,11 @@ import { computed, useAttrs } from 'vue';
 import type { ColorPair, Size } from './types';
 
 const attrs = useAttrs();
-
-/**
- * Button Props
- */
 interface Props {
   /**
    * Button Size
-   * @default md
+   * @values "xl", "lg", "md", "sm", "xs"
+   * @default "md"
    */
   size?: Size,
 
@@ -27,24 +32,26 @@ interface Props {
    * HTML-type for button
    * @values "button", "submit", "reset"
    * @default "button"
+   * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/button#type} - MDN docs
    */
   type?: "button"|"submit"|"reset",
 
   /**
    * Outline button style
+   * Modify color with bg prop
    * @default false
    */
   outline?: boolean,
 
   /**
-   * Background for button (default-hover)
-   * @default white/gray1
+   * Background for button (default/hover)
+   * @default "white/gray1"
    */
   bg?: ColorPair,
 
   /**
    * Text color for button (default/hover)
-   * @default black/gray3
+   * @default "black/gray3"
    */
   text?: ColorPair
 }
@@ -56,19 +63,21 @@ const props = withDefaults(defineProps<Props>(),{
   text: "black/gray3",
 });
 
-/**
- * Button emits
- */
 interface Emits {
   /**
-   * onClick event
-   * @param event MouseEvent
+   * Button onClick event
+   * @event 
+   * @param {MouseEvent} event - Default click event
+   * @example
+   * ```vue
+   * <Button @click="handleClick" />
+   * ```
    */
   (e: 'click', event: MouseEvent): void
 }
 const emits = defineEmits<Emits>(); 
 
-const getColors = (colors: ColorPair, prefix: "bg"|"color"): string => {
+const getColors = (colors: ColorPair, prefix: "bg"|"color"|"border"): string => {
   const [baseColor, hoverColor] = colors.split("/");
   return `${prefix}-${baseColor} hover:${prefix}-${hoverColor}`;
 }
@@ -83,14 +92,29 @@ const getSize = (size: Size): string => {
   }
   return result;
 }
+const classColors = (outline: boolean): string => {
+  let colors = [];
+  if (outline) {
+    colors = [
+      `border-w-1 border-solid bg-transparent`,
+      getColors(props.bg, "color"),
+      getColors(props.bg, "border")
+    ]
+  } else {
+    colors = [
+      getColors(props.text, "color"),
+      getColors(props.bg, "bg")
+    ]
+  }
+  return colors.join(" ");
+}
 
 const classes = computed(() => {
   return (
   [
     attrs.class,
     "dis-flex f-row f-nowrap c-pointer",
-    getColors(props.bg, "bg"),
-    getColors(props.text, "color"),
+    classColors(props.outline),
     getSize(props.size)
   ].join(" ")
   );

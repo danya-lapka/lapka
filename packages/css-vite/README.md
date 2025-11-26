@@ -16,7 +16,6 @@ Features:
 
 - [@danya-lapka/css-vite](#danya-lapkacss-vite)
   - [Installation](#installation)
-  - [Usage](#usage)
   - [Features](#features)
   - [CSS Classes](#css-classes)
     - [Variants](#variants)
@@ -28,15 +27,11 @@ Features:
 npm i @danya-lapka/css-vite
 ```
 
-## Usage
-
 ```ts
 // vite.config.ts
-import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import lapkaCss from '@danya-lapka/css-vite'
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     lapkaCss(),

@@ -206,7 +206,14 @@ createNumeric('gy', 'row-gap', REM);
 createBracket('gy', 'row-gap');
 
 // --- Sizing ---
-const sizeProps = { w: 'width', h: 'height', 'min-w': 'min-width', 'max-w': 'max-width', 'min-h': 'min-height', 'max-h': 'max-height' };
+const sizeProps = { 
+  w: 'width', 
+  h: 'height', 
+  'min-w': 'min-width', 
+  'max-w': 'max-width', 
+  'min-h': 'min-height', 
+  'max-h': 'max-height' 
+};
 Object.entries(sizeProps).forEach(([prefix, prop]) => {
   createNumeric(prefix, prop, REM);
   createBracket(prefix, prop);
@@ -226,7 +233,6 @@ Object.entries(sizeProps).forEach(([prefix, prop]) => {
 ['relative', 'absolute', 'fixed', 'sticky', 'static'].forEach(p => addStatic(p, { position: p }));
 
 // --- Flexbox ---
-addStatic('inline-flex', { display: 'inline-flex' });
 addStatic('f-row', { 'flex-direction': 'row' });
 addStatic('f-col', { 'flex-direction': 'column' });
 addStatic('f-row-rev', { 'flex-direction': 'row-reverse' });
@@ -363,28 +369,23 @@ addStatic('truncate', {
 });
 
 // --- Borders & Radius ---
+
+const borderStyles = { 
+  solid: 'solid', 
+  dashed: 'dashed', 
+  dotted: 'dotted', 
+  double: 'double', 
+  groove: 'groove', 
+  ridge: 'ridge', 
+  none: 'none' 
+}
+
 createNumeric('r', 'border-radius', REM);
 createBracket('r', 'border-radius');
 createNumeric('border-w', 'border-width', REM);
-createStringMap('border', 'border-style', { 
-  solid: 'solid', 
-  dashed: 'dashed', 
-  dotted: 'dotted', 
-  double: 'double', 
-  groove: 'groove', 
-  ridge: 'ridge', 
-  none: 'none' 
-});
+createStringMap('border', 'border-style', borderStyles);
 createNumeric('outline-w', 'outline-width', REM);
-createStringMap('outline', 'outline-style', { 
-  solid: 'solid', 
-  dashed: 'dashed', 
-  dotted: 'dotted', 
-  double: 'double', 
-  groove: 'groove', 
-  ridge: 'ridge', 
-  none: 'none' 
-});
+createStringMap('outline', 'outline-style', borderStyles);
 
 // --- Effects ---
 createNumeric('z', 'z-index', { scale: 1, unit: '' });
