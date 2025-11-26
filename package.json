@@ -6,8 +6,8 @@
   ],
   "scripts": {
     "build": "turbo check-types build",
-    "publish:css-vite": "npm run build && cd packages/css-vite && npm publish --access public",
-    "publish:components-vue": "npm run build && cd packages/components-vue && npm publish --access public"
+    "publish:css-vite": "cd packages/css-vite && npm publish --access public",
+    "publish:components-vue": "cd packages/components-vue && npm publish --access public"
   },
   "devDependencies": {
     "turbo": "^2.6.1"
