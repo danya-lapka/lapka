@@ -69,7 +69,8 @@ const classes = computed(() => {
   [
     props.class,
     getColors(props.bg, "bg"),
-    getColors(props.text, "color")
+    getColors(props.text, "color"),
+    "dis-flex f-row f-nowrap c-pointer"
   ].join(" ")
   );
 })
