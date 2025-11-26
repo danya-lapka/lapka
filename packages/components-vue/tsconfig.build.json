@@ -4,7 +4,12 @@
   "exclude": ["node_modules", "dist", "tests"],
   "compilerOptions": {
     "declaration": true,
+    "declarationDir": "./dist",
     "emitDeclarationOnly": true,
+    "noEmit": false,
+    "module": "esnext",
+    "target": "es2020",
+    "rootDir": "./src",
     "outDir": "dist",
     "types": ["vite/client"],
     "moduleResolution": "bundler",

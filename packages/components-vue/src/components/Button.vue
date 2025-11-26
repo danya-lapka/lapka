@@ -26,19 +26,19 @@ interface Props extends DefaultProps {
    * Outline button style
    * @default false
    */
-  outline: boolean,
+  outline?: boolean,
 
   /**
    * Background for button (default-hover)
    * @default white/gray1
    */
-  bg: ColorPair,
+  bg?: ColorPair,
 
   /**
    * Text color for button (default/hover)
    * @default black/gray3
    */
-  text: ColorPair
+  text?: ColorPair
 }
 const props = withDefaults(defineProps<Props>(),{
   type: "button",

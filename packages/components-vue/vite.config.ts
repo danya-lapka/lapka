@@ -5,8 +5,25 @@ import lapkaCss from '@danya-lapka/css-vite'
 
 export default defineConfig({
   plugins: [
+    lapkaCss(),
     vue(),
-    lapkaCss()
+    {
+      name: 'remove-virtual-css-import',
+      generateBundle(_, bundle) {
+        Object.keys(bundle).forEach(fileName => {
+          if (fileName.endsWith('.js') || fileName.endsWith('.mjs')) {
+            const chunk = bundle[fileName];
+            if (chunk.type === 'chunk') {
+              // Удаляем импорт из сгенерированного кода
+              chunk.code = chunk.code.replace(
+                /import\s+"virtual:lapka\.css";?\s*/g, 
+                ''
+              );
+            }
+          }
+        });
+      }
+    }
   ],
   build: {
     lib: {
@@ -15,7 +32,7 @@ export default defineConfig({
       fileName: 'components-vuey'
     },
     rollupOptions: {
-      external: ['vue'],
+      external: ['vue', 'virtual:lapka.css'],
       output: {
         globals: {
           vue: 'Vue'

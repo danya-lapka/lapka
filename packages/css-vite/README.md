@@ -40,18 +40,26 @@ export default defineConfig({
     lapkaCss(),
     // your other plugins (vue(), react(), etc.)
   ],
+  optimizeDeps: {
+    exclude: ['virtual:lapka.css'],
+    include: ['vite-plugin-lapka-css']
+  },
+  build: {
+    rollupOptions: {
+      external: ['virtual:lapka.css']
+    }
+  },
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      'virtual:lapka.css': require.resolve('vite-plugin-lapka-css/empty.css')
+    }
+  }
 })
 ```
 
 Import CSS (required!):
 
-`env.d.ts`
-```ts
-declare module 'virtual:lapka.css' {
-  const content: string;
-  export default content;
-}
-```
 `main.ts`
 ```ts
 import 'virtual:lapka.css'
