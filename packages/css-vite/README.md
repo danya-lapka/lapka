@@ -42,7 +42,7 @@ export default defineConfig({
   ],
   optimizeDeps: {
     exclude: ['virtual:lapka.css'],
-    include: ['vite-plugin-lapka-css']
+    include: ['@danya-lapka/css-vite']
   },
   build: {
     rollupOptions: {
@@ -52,7 +52,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      'virtual:lapka.css': require.resolve('vite-plugin-lapka-css/empty.css')
+      'virtual:lapka.css': require.resolve('@danya-lapka/css-vite/empty.css')
     }
   }
 })
