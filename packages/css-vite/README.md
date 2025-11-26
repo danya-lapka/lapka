@@ -45,10 +45,16 @@ export default defineConfig({
 
 Import CSS (required!):
 
+`env.d.ts`
 ```ts
-import '@danya-lapka/css-vite'        // ← loads the virtual module
-// or
-import 'virtual:lapka-css'
+declare module 'virtual:lapka.css' {
+  const content: string;
+  export default content;
+}
+```
+`main.ts`
+```ts
+import 'virtual:lapka.css'
 ```
 
 ## Features
