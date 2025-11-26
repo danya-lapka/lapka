@@ -1,0 +1,36 @@
+{
+  "name": "@danya-lapka/components-vue",
+  "version": "1.0.0",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.umd.js"
+    },
+    "./style.css": "./dist/index.css"
+  },
+  "scripts": {
+    "build": "tsup && vue-tsc --project tsconfig.build.json --noEmit false"
+  },
+  "keywords": [
+    "vue",
+    "components"
+  ],
+  "author": "Danya Lapka",
+  "license": "MIT",
+  "peerDependencies": {
+    "vue": "^3.5.25"
+  },
+  "devDependencies": {
+    "@vue/compiler-sfc": "^3.5.25",
+    "esbuild-plugin-vue3": "^0.5.1",
+    "vite": "^7.2.4",
+    "@vitejs/plugin-vue": "^6.0.2",
+    "@danya-lapka/css-vite": "^1.0.3",
+    "vue-tsc": "^3.1.5"
+  }
+}

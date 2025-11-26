@@ -28,14 +28,15 @@ export default function lapkaCss(): Plugin {
     if (stringLiterals) {
       stringLiterals.forEach(literal => {
         const content = literal.slice(1, -1);
-        if (content.includes('-')) {
-          const parts = content.split('-');
+        if (content.includes('/')) {
+          const parts = content.split('/');
           if (parts.length === 2 && themeColorKeys.has(parts[0]) && themeColorKeys.has(parts[1])) {
             const [base, hover] = parts;
             const newPairs = [
                 `bg-${base}`, `hover:bg-${hover}`,
                 `color-${base}`, `hover:color-${hover}`,
-                `border-${base}`, `hover:border-${hover}`
+                `border-${base}`, `hover:border-${hover}`,
+                `outline-${base}`, `hover:outline-${hover}`
             ];
             newPairs.forEach(cls => {
                 if (!knownClasses.has(cls)) {
