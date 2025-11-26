@@ -1,6 +1,6 @@
 {
   "name": "@danya-lapka/css-vite",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "private": false,
   "description": "Custom atomic CSS generator for Vite",
   "type": "module",
@@ -12,11 +12,12 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
-    }
+    },
+    "./empty.css": "./empty.css"
   },
   "files": [
     "dist",
-    "virtual-lapka-emplty.css"
+    "empty.css"
   ],
   "scripts": {
     "build": "tsup"

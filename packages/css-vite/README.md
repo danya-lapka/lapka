@@ -32,13 +32,15 @@ npm i @danya-lapka/css-vite
 
 ```ts
 // vite.config.ts
+import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import lapkaCss from '@danya-lapka/css-vite'
+import { resolve } from 'path';
 
+// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     lapkaCss(),
-    // your other plugins (vue(), react(), etc.)
   ],
   optimizeDeps: {
     exclude: ['virtual:lapka.css'],
@@ -52,16 +54,17 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      'virtual:lapka.css': require.resolve('@danya-lapka/css-vite/empty.css')
+      'virtual:lapka.css': resolve('node_modules', '@danya-lapka/css-vite', 'empty.css')
     }
   }
 })
+
 ```
 
 Import CSS (required!):
 
-`main.ts`
 ```ts
+// main.ts
 import 'virtual:lapka.css'
 ```
 
